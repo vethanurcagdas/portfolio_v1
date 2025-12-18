@@ -442,11 +442,17 @@ function splitProjectContentIntoPages() {
             // Page 1: Tags + Title + Description (first part)
             const page1 = document.createElement('div');
             page1.className = 'project-content-page';
-            if (tags) page1.appendChild(tags.cloneNode(true));
-            if (title) page1.appendChild(title.cloneNode(true));
+            if (tags) {
+                const tagsClone = tags.cloneNode(true);
+                page1.appendChild(tagsClone);
+            }
+            if (title) {
+                const titleClone = title.cloneNode(true);
+                page1.appendChild(titleClone);
+            }
             if (description) {
                 const descClone = description.cloneNode(true);
-                const text = descClone.textContent;
+                const text = descClone.textContent || descClone.innerText || '';
                 const midPoint = Math.floor(text.length / 2);
                 const firstPart = text.substring(0, midPoint);
                 descClone.textContent = firstPart + '...';
@@ -459,20 +465,29 @@ function splitProjectContentIntoPages() {
             page2.className = 'project-content-page';
             if (description) {
                 const descClone = description.cloneNode(true);
-                const text = descClone.textContent;
+                const text = descClone.textContent || descClone.innerText || '';
                 const midPoint = Math.floor(text.length / 2);
                 const secondPart = text.substring(midPoint);
                 descClone.textContent = '...' + secondPart;
                 page2.appendChild(descClone);
             }
-            if (features) page2.appendChild(features.cloneNode(true));
+            if (features) {
+                const featuresClone = features.cloneNode(true);
+                page2.appendChild(featuresClone);
+            }
             wrapper.appendChild(page2);
             
             // Page 3: Tech + Buttons
             const page3 = document.createElement('div');
             page3.className = 'project-content-page';
-            if (tech) page3.appendChild(tech.cloneNode(true));
-            if (links) page3.appendChild(links.cloneNode(true));
+            if (tech) {
+                const techClone = tech.cloneNode(true);
+                page3.appendChild(techClone);
+            }
+            if (links) {
+                const linksClone = links.cloneNode(true);
+                page3.appendChild(linksClone);
+            }
             wrapper.appendChild(page3);
         } else {
             // Desktop: Keep normal layout, just wrap in container

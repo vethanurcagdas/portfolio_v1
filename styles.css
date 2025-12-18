@@ -1935,15 +1935,14 @@ section {
         width: 300%;
         min-width: 300%;
         max-width: 300%;
-        height: 100%;
+        height: auto;
+        min-height: 100%;
         margin: 0;
         padding: 0;
         position: relative;
         box-sizing: border-box;
         /* Ensure wrapper doesn't overflow parent */
         will-change: transform;
-        /* Prevent any overflow */
-        contain: strict;
     }
 
     .project-content-page {
@@ -1952,7 +1951,7 @@ section {
         max-width: 33.333333%;
         flex-shrink: 0;
         flex-grow: 0;
-        padding: 0;
+        padding: 0 0.5rem;
         margin: 0;
         scroll-snap-align: start;
         scroll-snap-stop: always;
@@ -1960,15 +1959,13 @@ section {
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        height: 100%;
-        overflow: hidden;
+        height: auto;
+        min-height: 100%;
+        overflow: visible;
         position: relative;
         /* Ensure no content spills out */
         word-wrap: break-word;
         overflow-wrap: break-word;
-        /* Prevent any horizontal overflow */
-        min-width: 0;
-        contain: layout style;
     }
 
     .project-content-page > * {
@@ -1978,13 +1975,16 @@ section {
         box-sizing: border-box;
         padding-left: 0;
         padding-right: 0;
-        overflow: hidden;
         word-wrap: break-word;
         overflow-wrap: break-word;
+        display: block;
     }
 
-    .project-content-page {
+    .project-content-page:first-child {
         padding-left: 0;
+    }
+
+    .project-content-page:last-child {
         padding-right: 0;
     }
 
