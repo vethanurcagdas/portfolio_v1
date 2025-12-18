@@ -412,8 +412,18 @@ function splitProjectContentIntoPages() {
     const isMobile = window.innerWidth <= 968;
     
     projectContents.forEach((content) => {
-        // Check if already wrapped
-        if (content.querySelector('.project-content-wrapper')) {
+        // Remove existing wrapper if any (to allow re-splitting on resize)
+        const existingWrapper = content.querySelector('.project-content-wrapper');
+        if (existingWrapper && isMobile) {
+            // If mobile and wrapper exists, check if it needs to be recreated
+            const pages = existingWrapper.querySelectorAll('.project-content-page');
+            if (pages.length === 3) {
+                return; // Already correctly split
+            }
+            // Otherwise, remove and recreate
+            existingWrapper.remove();
+        } else if (existingWrapper && !isMobile) {
+            // Desktop: just keep the wrapper as is
             return;
         }
         
@@ -718,6 +728,22 @@ window.addEventListener('load', () => {
         }, 100);
     }, 100);
     initImageGallery();
+});
+
+// Re-split on resize to handle mobile/desktop switching
+let globalResizeTimeout;
+window.addEventListener('resize', () => {
+    clearTimeout(globalResizeTimeout);
+    globalResizeTimeout = setTimeout(() => {
+        // Force re-split by removing all wrappers
+        document.querySelectorAll('.project-content-wrapper').forEach(wrapper => {
+            wrapper.remove();
+        });
+        splitProjectContentIntoPages();
+        setTimeout(() => {
+            initProjectScrollIndicators();
+        }, 100);
+    }, 250);
 });
 
 // Skill bars animation

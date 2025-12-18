@@ -76,3 +76,4 @@ Eğer hala çalışmıyorsa:
 
 **Hala çalışmıyorsa, GitHub Pages ayarları ekranının screenshot'ını paylaş, birlikte çözelim!**
 
+

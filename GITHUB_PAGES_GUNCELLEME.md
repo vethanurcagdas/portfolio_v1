@@ -99,3 +99,4 @@ Push yaptıktan sonra:
 
 **Ortalama güncelleme süresi: 1-3 dakika** ⏱️
 
+

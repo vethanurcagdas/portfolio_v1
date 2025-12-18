@@ -63,3 +63,4 @@ Eğer XML içeriği görünüyorsa: ✅ Sitemap erişilebilir
 
 **Push yaptıktan sonra 10-15 dakika bekle ve Google Search Console'da durumu tekrar kontrol et!** 🔄
 
+

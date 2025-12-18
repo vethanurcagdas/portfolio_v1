@@ -48,3 +48,4 @@ GitHub Pages ayarları kaydedildi. Şimdi site build ediliyor.
 
 **5 dakika bekle ve site URL'ini aç!** 🚀
 
+

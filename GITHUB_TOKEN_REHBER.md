@@ -83,3 +83,4 @@ Terminal zor geliyorsa, GitHub web'den yükle:
 
 **Hangi yöntemi tercih edersin?**
 
+

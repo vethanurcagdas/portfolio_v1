@@ -67,3 +67,4 @@ Eğer hala çalışmıyorsa, repository'yi silip yeniden oluştur:
 
 **GitHub Desktop'ta push yaptın mı? Settings > Pages'de ne görüyorsun?**
 
+

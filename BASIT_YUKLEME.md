@@ -90,3 +90,4 @@ Terminal komutları karmaşık geldiyse, bu yöntem çok daha kolay!
 
 **Bu yöntem terminal komutlarından çok daha kolay!** 🚀
 
+

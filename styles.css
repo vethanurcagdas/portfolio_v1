@@ -1912,8 +1912,9 @@ section {
         box-sizing: border-box;
         display: block;
         touch-action: pan-x;
-        /* Prevent content from showing outside */
+        /* Prevent overflow */
         clip-path: inset(0);
+        isolation: isolate;
     }
 
     .project-content::-webkit-scrollbar {
@@ -1932,12 +1933,13 @@ section {
         box-sizing: border-box;
         flex-direction: row;
         height: 100%;
+        flex-shrink: 0;
     }
 
     .project-content-page {
-        width: 33.333333%;
-        min-width: 33.333333%;
-        max-width: 33.333333%;
+        width: 100%;
+        min-width: 100%;
+        max-width: 100%;
         flex-shrink: 0;
         flex-grow: 0;
         padding: 0 1rem;
@@ -2383,6 +2385,7 @@ section {
         scroll-snap-type: x mandatory;
         touch-action: pan-x;
         clip-path: inset(0);
+        isolation: isolate;
     }
 
     .project-content-wrapper {
@@ -2392,12 +2395,13 @@ section {
         max-width: 300%;
         flex-direction: row;
         height: 100%;
+        flex-shrink: 0;
     }
 
     .project-content-page {
-        width: 33.333333%;
-        min-width: 33.333333%;
-        max-width: 33.333333%;
+        width: 100%;
+        min-width: 100%;
+        max-width: 100%;
         flex-shrink: 0;
         flex-grow: 0;
         padding: 0 0.75rem;
@@ -2429,7 +2433,11 @@ section {
     .project-content {
         width: 100%;
         max-width: 100%;
-        overflow: visible;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        touch-action: pan-x;
     }
 
     .projects .container {

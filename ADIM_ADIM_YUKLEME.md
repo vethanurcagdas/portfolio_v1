@@ -155,3 +155,4 @@ Eğer sürükle-bırak çalışmazsa:
 
 **Netlify en kolay yöntem! Önce onu dene!** 🚀
 
+
