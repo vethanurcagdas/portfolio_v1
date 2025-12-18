@@ -406,9 +406,10 @@ animateElements.forEach(el => {
     observer.observe(el);
 });
 
-// Split project content into 3 pages
+// Split project content into pages (3 pages for mobile, normal for desktop)
 function splitProjectContentIntoPages() {
     const projectContents = document.querySelectorAll('.project-content');
+    const isMobile = window.innerWidth <= 968;
     
     projectContents.forEach((content) => {
         // Check if already wrapped
@@ -424,25 +425,61 @@ function splitProjectContentIntoPages() {
         const wrapper = document.createElement('div');
         wrapper.className = 'project-content-wrapper';
         
-        // Split children into 3 groups
-        const itemsPerPage = Math.ceil(children.length / 3);
-        const pages = [];
-        
-        for (let i = 0; i < 3; i++) {
-            const page = document.createElement('div');
-            page.className = 'project-content-page';
-            pages.push(page);
+        if (isMobile) {
+            // Mobile: Split into 3 pages with same structure
+            // Page 1: Tags + Title + Description (first part)
+            // Page 2: Description (rest) + Features
+            // Page 3: Tech + Buttons
             
-            const startIndex = i * itemsPerPage;
-            const endIndex = Math.min(startIndex + itemsPerPage, children.length);
+            // Find elements
+            const tags = children.find(el => el.classList.contains('project-tags'));
+            const title = children.find(el => el.classList.contains('project-title'));
+            const description = children.find(el => el.classList.contains('project-description'));
+            const features = children.find(el => el.classList.contains('project-features'));
+            const tech = children.find(el => el.classList.contains('project-tech'));
+            const links = children.find(el => el.classList.contains('project-links'));
             
-            for (let j = startIndex; j < endIndex; j++) {
-                if (children[j]) {
-                    page.appendChild(children[j].cloneNode(true));
-                }
+            // Page 1: Tags + Title + Description (first part)
+            const page1 = document.createElement('div');
+            page1.className = 'project-content-page';
+            if (tags) page1.appendChild(tags.cloneNode(true));
+            if (title) page1.appendChild(title.cloneNode(true));
+            if (description) {
+                const descClone = description.cloneNode(true);
+                const text = descClone.textContent;
+                const midPoint = Math.floor(text.length / 2);
+                const firstPart = text.substring(0, midPoint);
+                descClone.textContent = firstPart + '...';
+                page1.appendChild(descClone);
             }
+            wrapper.appendChild(page1);
             
-            wrapper.appendChild(page);
+            // Page 2: Description (rest) + Features
+            const page2 = document.createElement('div');
+            page2.className = 'project-content-page';
+            if (description) {
+                const descClone = description.cloneNode(true);
+                const text = descClone.textContent;
+                const midPoint = Math.floor(text.length / 2);
+                const secondPart = text.substring(midPoint);
+                descClone.textContent = '...' + secondPart;
+                page2.appendChild(descClone);
+            }
+            if (features) page2.appendChild(features.cloneNode(true));
+            wrapper.appendChild(page2);
+            
+            // Page 3: Tech + Buttons
+            const page3 = document.createElement('div');
+            page3.className = 'project-content-page';
+            if (tech) page3.appendChild(tech.cloneNode(true));
+            if (links) page3.appendChild(links.cloneNode(true));
+            wrapper.appendChild(page3);
+        } else {
+            // Desktop: Keep normal layout, just wrap in container
+            children.forEach(child => {
+                const cloned = child.cloneNode(true);
+                wrapper.appendChild(cloned);
+            });
         }
         
         // Clear original content and add wrapper
@@ -463,10 +500,9 @@ function initProjectScrollIndicators() {
             existingIndicator.remove();
         }
         
-        // Always create indicator for desktop (3 pages)
-        // For mobile, check if scrollable
+        // Check if scrollable
         const isMobile = window.innerWidth <= 968;
-        const isScrollable = !isMobile || (content.scrollWidth > content.clientWidth + 10);
+        const isScrollable = content.scrollWidth > content.clientWidth + 10;
         
         if (isScrollable) {
             // Create indicator container
@@ -474,8 +510,8 @@ function initProjectScrollIndicators() {
             indicator.className = 'project-scroll-indicator';
             indicator.setAttribute('data-project-index', index);
             
-            // Always 3 pages for desktop, calculate for mobile
-            const pageCount = isMobile ? Math.max(1, Math.ceil(content.scrollWidth / content.clientWidth)) : 3;
+            // Calculate page count based on scroll width
+            const pageCount = isMobile ? 3 : Math.max(1, Math.ceil(content.scrollWidth / content.clientWidth));
             
             // Create dots
             for (let i = 0; i < pageCount; i++) {
@@ -553,17 +589,119 @@ function updateScrollIndicator(content, indicator, pageCount) {
     });
 }
 
+// Image Gallery Carousel
+function initImageGallery() {
+    const gallery = document.querySelector('.image-gallery');
+    if (!gallery) return;
+    
+    const images = gallery.querySelectorAll('.gallery-image');
+    const dots = gallery.querySelectorAll('.gallery-dot');
+    const prevBtn = gallery.querySelector('.gallery-prev');
+    const nextBtn = gallery.querySelector('.gallery-next');
+    
+    let currentIndex = 0;
+    const totalImages = images.length;
+    
+    function showImage(index) {
+        images.forEach((img, i) => {
+            img.classList.toggle('active', i === index);
+        });
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === index);
+        });
+        currentIndex = index;
+    }
+    
+    function nextImage() {
+        const nextIndex = (currentIndex + 1) % totalImages;
+        showImage(nextIndex);
+    }
+    
+    function prevImage() {
+        const prevIndex = (currentIndex - 1 + totalImages) % totalImages;
+        showImage(prevIndex);
+    }
+    
+    // Button events
+    if (nextBtn) {
+        nextBtn.addEventListener('click', nextImage);
+    }
+    if (prevBtn) {
+        prevBtn.addEventListener('click', prevImage);
+    }
+    
+    // Dot events
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => showImage(index));
+    });
+    
+    // Auto-play (optional - every 5 seconds)
+    let autoPlayInterval = setInterval(nextImage, 5000);
+    
+    // Pause on hover
+    gallery.addEventListener('mouseenter', () => {
+        clearInterval(autoPlayInterval);
+    });
+    
+    gallery.addEventListener('mouseleave', () => {
+        autoPlayInterval = setInterval(nextImage, 5000);
+    });
+    
+    // Touch swipe support for mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    gallery.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+    
+    gallery.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    });
+    
+    function handleSwipe() {
+        if (touchEndX < touchStartX - 50) {
+            nextImage();
+        }
+        if (touchEndX > touchStartX + 50) {
+            prevImage();
+        }
+    }
+}
+
 // Initialize project pages and scroll indicators when DOM is ready
 function initProjects() {
-    splitProjectContentIntoPages();
-    initProjectScrollIndicators();
+    // Wait a bit for DOM to be fully ready
+    setTimeout(() => {
+        splitProjectContentIntoPages();
+        // Wait a bit more for wrapper to be created
+        setTimeout(() => {
+            initProjectScrollIndicators();
+        }, 100);
+    }, 100);
 }
 
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initProjects);
+    document.addEventListener('DOMContentLoaded', () => {
+        initProjects();
+        initImageGallery();
+    });
 } else {
     initProjects();
+    initImageGallery();
 }
+
+// Also run on window load as backup
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        splitProjectContentIntoPages();
+        setTimeout(() => {
+            initProjectScrollIndicators();
+        }, 100);
+    }, 100);
+    initImageGallery();
+});
 
 // Skill bars animation
 const skillBars = document.querySelectorAll('.skill-progress');
