@@ -1864,7 +1864,7 @@ section {
         display: block;
         width: 100%;
         max-width: 100%;
-        overflow-x: visible;
+        overflow-x: hidden;
         overflow-y: visible;
         padding: 0;
         margin: 0;
@@ -1880,15 +1880,11 @@ section {
         margin-left: 0;
         margin-right: 0;
         padding: 1.5rem;
-        overflow: visible;
+        overflow: hidden;
         display: grid;
         box-sizing: border-box;
         position: relative;
         min-width: 0;
-    }
-
-    .project-card {
-        overflow: visible;
     }
 
     .project-image {
@@ -1901,7 +1897,7 @@ section {
 
     .project-content {
         overflow-x: auto;
-        overflow-y: visible;
+        overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
         -ms-overflow-style: none;
@@ -1916,6 +1912,8 @@ section {
         box-sizing: border-box;
         display: block;
         touch-action: pan-x;
+        /* Prevent content from showing outside */
+        clip-path: inset(0);
     }
 
     .project-content::-webkit-scrollbar {
@@ -1933,6 +1931,7 @@ section {
         position: relative;
         box-sizing: border-box;
         flex-direction: row;
+        height: 100%;
     }
 
     .project-content-page {
@@ -1949,8 +1948,11 @@ section {
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        overflow: visible;
+        overflow: hidden;
         position: relative;
+        /* Prevent content from spilling */
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
 
     .project-content-page > * {
@@ -1959,6 +1961,9 @@ section {
         margin-bottom: 1rem;
         box-sizing: border-box;
         display: block;
+        overflow: hidden;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
 
     .project-content-page .project-tags {
@@ -2373,10 +2378,11 @@ section {
 
     .project-content {
         overflow-x: auto;
-        overflow-y: visible;
+        overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
         scroll-snap-type: x mandatory;
         touch-action: pan-x;
+        clip-path: inset(0);
     }
 
     .project-content-wrapper {
@@ -2385,6 +2391,7 @@ section {
         min-width: 300%;
         max-width: 300%;
         flex-direction: row;
+        height: 100%;
     }
 
     .project-content-page {
@@ -2394,6 +2401,9 @@ section {
         flex-shrink: 0;
         flex-grow: 0;
         padding: 0 0.75rem;
+        overflow: hidden;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
 
     .projects-container {
