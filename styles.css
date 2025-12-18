@@ -1898,131 +1898,12 @@ section {
     }
 
     .project-content {
-        overflow-x: auto;
-        overflow-y: visible;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-        padding: 0;
-        margin: 0;
-        width: 100%;
-        max-width: 100%;
-        min-width: 0;
-        min-height: 200px;
-        position: relative;
-        scroll-snap-type: x mandatory;
-        scroll-padding: 0;
-        scroll-behavior: smooth;
-        box-sizing: border-box;
-        display: block;
-    }
-
-    .project-content::-webkit-scrollbar {
-        display: none;
-    }
-
-    /* Mobile: 3 pages layout */
-    .project-content-wrapper {
-        display: flex;
-        width: 300%;
-        min-width: 300%;
-        max-width: 300%;
-        height: 100%;
-        min-height: 200px;
-        margin: 0;
-        padding: 0;
-        position: relative;
-        box-sizing: border-box;
-        will-change: transform;
-    }
-
-    .project-content-page {
-        width: 33.333333%;
-        min-width: 33.333333%;
-        max-width: 33.333333%;
-        flex-shrink: 0;
-        flex-grow: 0;
-        padding: 0 0.75rem;
-        margin: 0;
-        scroll-snap-align: start;
-        scroll-snap-stop: always;
-        box-sizing: border-box;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        height: 100%;
-        min-height: 200px;
         overflow: visible;
-        position: relative;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-    }
-
-    .project-content-page > * {
         width: 100%;
         max-width: 100%;
-        margin-bottom: 1rem;
+        position: relative;
         box-sizing: border-box;
-        padding-left: 0;
-        padding-right: 0;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
         display: block;
-        visibility: visible;
-        opacity: 1;
-    }
-
-    .project-content-page:first-child {
-        padding-left: 0;
-    }
-
-    .project-content-page:last-child {
-        padding-right: 0;
-    }
-
-    /* Ensure content is visible */
-    .project-content-wrapper,
-    .project-content-page {
-        visibility: visible !important;
-        opacity: 1 !important;
-    }
-
-    /* Ensure project card doesn't show overflow from other projects */
-    .project-card {
-        isolation: isolate;
-    }
-
-    .project-content-page .project-tags {
-        margin-bottom: 1rem;
-    }
-
-    .project-content-page .project-title {
-        margin-bottom: 1rem;
-        font-size: 1.5rem;
-    }
-
-    .project-content-page .project-description {
-        margin-bottom: 1rem;
-        line-height: 1.6;
-    }
-
-    .project-content-page .project-features {
-        margin-bottom: 1rem;
-    }
-
-    .project-content-page .project-tech {
-        margin-bottom: 1rem;
-    }
-
-    .project-content-page .project-links {
-        margin-top: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-
-    .project-content::-webkit-scrollbar {
-        height: 6px;
     }
 
     .project-content::-webkit-scrollbar-track {
@@ -2435,26 +2316,7 @@ section {
     .project-content {
         width: 100%;
         max-width: 100%;
-        min-width: 0;
-        overflow-x: auto;
-        overflow-y: hidden;
-        contain: layout style;
-        clip-path: inset(0);
-    }
-
-    .project-content-wrapper {
-        width: 300%;
-        min-width: 300%;
-        max-width: 300%;
-        contain: strict;
-    }
-
-    .project-content-page {
-        width: calc(100% / 3);
-        min-width: calc(100% / 3);
-        max-width: calc(100% / 3);
-        min-width: 0;
-        contain: layout style;
+        overflow: visible;
     }
 
     .projects .container {
