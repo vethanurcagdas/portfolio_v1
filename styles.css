@@ -1947,13 +1947,17 @@ section {
         scroll-snap-align: start;
         scroll-snap-stop: always;
         box-sizing: border-box;
-        display: flex;
+        display: flex !important;
         flex-direction: column;
         justify-content: flex-start;
         overflow: hidden;
         position: relative;
         word-wrap: break-word;
         overflow-wrap: break-word;
+        /* Ensure visibility */
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: translateY(0) !important;
     }
 
     .project-content-page > * {

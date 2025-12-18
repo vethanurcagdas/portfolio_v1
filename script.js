@@ -446,6 +446,13 @@ function splitProjectContentIntoPages() {
                 // Already correctly set up for mobile
                 const pages = existingWrapper.querySelectorAll('.project-content-page');
                 if (pages.length === 3) {
+                    // Ensure pages are visible
+                    pages.forEach(page => {
+                        page.style.opacity = '1';
+                        page.style.transform = 'translateY(0)';
+                        page.style.visibility = 'visible';
+                        page.style.display = 'flex';
+                    });
                     return; // Already correctly split
                 }
                 // Wrong number of pages, recreate
@@ -529,6 +536,15 @@ function splitProjectContentIntoPages() {
             // Clear original content and add wrapper
             content.innerHTML = '';
             content.appendChild(wrapper);
+            
+            // Ensure pages are visible after creation
+            const pages = wrapper.querySelectorAll('.project-content-page');
+            pages.forEach(page => {
+                page.style.opacity = '1';
+                page.style.transform = 'translateY(0)';
+                page.style.visibility = 'visible';
+                page.style.display = 'flex';
+            });
         } else {
             // Desktop: No wrapper needed, keep original layout
             // Don't modify content for desktop
@@ -736,6 +752,13 @@ function initProjects() {
         // Wait a bit more for wrapper to be created
         setTimeout(() => {
             initProjectScrollIndicators();
+            // Ensure all project content pages are visible
+            document.querySelectorAll('.project-content-page').forEach(page => {
+                page.style.opacity = '1';
+                page.style.transform = 'translateY(0)';
+                page.style.visibility = 'visible';
+                page.style.display = 'flex';
+            });
         }, 100);
     }, 100);
 }
@@ -756,6 +779,13 @@ window.addEventListener('load', () => {
         splitProjectContentIntoPages();
         setTimeout(() => {
             initProjectScrollIndicators();
+            // Ensure all project content pages are visible
+            document.querySelectorAll('.project-content-page').forEach(page => {
+                page.style.opacity = '1';
+                page.style.transform = 'translateY(0)';
+                page.style.visibility = 'visible';
+                page.style.display = 'flex';
+            });
         }, 100);
     }, 100);
     initImageGallery();
@@ -773,6 +803,13 @@ window.addEventListener('resize', () => {
         splitProjectContentIntoPages();
         setTimeout(() => {
             initProjectScrollIndicators();
+            // Ensure all project content pages are visible
+            document.querySelectorAll('.project-content-page').forEach(page => {
+                page.style.opacity = '1';
+                page.style.transform = 'translateY(0)';
+                page.style.visibility = 'visible';
+                page.style.display = 'flex';
+            });
         }, 100);
     }, 250);
 });
