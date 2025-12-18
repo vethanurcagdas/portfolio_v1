@@ -1615,6 +1615,46 @@ section {
     transform: translateY(-3px);
 }
 
+/* Scroll to Top Button */
+.scroll-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 50px;
+    height: 50px;
+    background: var(--gradient-1);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.scroll-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.scroll-to-top:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    background: var(--gradient-2);
+}
+
+.scroll-to-top:active {
+    transform: translateY(-2px);
+}
+
 /* Responsive Design */
 @media (max-width: 968px) {
     .container {
@@ -1735,11 +1775,15 @@ section {
     .projects {
         overflow-x: hidden;
         width: 100%;
+        max-width: 100%;
     }
 
     .projects .container {
         padding: 0 1.5rem;
         max-width: 100%;
+        width: 100%;
+        overflow-x: hidden;
+        box-sizing: border-box;
     }
 
     .projects .section-title,
@@ -1750,6 +1794,8 @@ section {
     .projects-container {
         display: block;
         width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
     }
 
     .project-card,
@@ -1760,8 +1806,9 @@ section {
         max-width: 100%;
         margin-bottom: 2rem;
         padding: 1.5rem;
-        overflow: visible;
+        overflow: hidden;
         display: grid;
+        box-sizing: border-box;
     }
 
     .project-image {
@@ -1774,15 +1821,22 @@ section {
 
     .project-content {
         overflow-x: auto;
-        overflow-y: visible;
+        overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
-        scrollbar-width: thin;
-        scrollbar-color: var(--primary-color) transparent;
-        padding-bottom: 0.5rem;
-        margin-bottom: -0.5rem;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        padding: 0;
+        margin: 0;
         width: 100%;
+        max-width: 100%;
         position: relative;
         scroll-snap-type: x mandatory;
+        scroll-padding: 0;
+        scroll-behavior: smooth;
+    }
+
+    .project-content::-webkit-scrollbar {
+        display: none;
     }
 
     /* Mobile: 3 pages layout */
@@ -1790,25 +1844,44 @@ section {
         display: flex;
         width: 300%;
         min-width: 300%;
+        max-width: 300%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        position: relative;
     }
 
     .project-content-page {
-        width: 33.333%;
-        min-width: 33.333%;
+        width: 33.333333%;
+        min-width: 33.333333%;
+        max-width: 33.333333%;
         flex-shrink: 0;
-        padding-right: 1rem;
-        padding-left: 0;
+        flex-grow: 0;
+        padding: 0;
+        margin: 0;
         scroll-snap-align: start;
+        scroll-snap-stop: always;
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         height: 100%;
+        overflow: hidden;
+        position: relative;
     }
 
     .project-content-page > * {
         width: 100%;
+        max-width: 100%;
         margin-bottom: 1rem;
+        box-sizing: border-box;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .project-content-page {
+        padding-left: 0;
+        padding-right: 0;
     }
 
     .project-content-page .project-tags {
@@ -2061,6 +2134,14 @@ section {
         padding: 0 1rem;
     }
 
+    .scroll-to-top {
+        width: 45px;
+        height: 45px;
+        bottom: 1.5rem;
+        right: 1.5rem;
+        font-size: 1.1rem;
+    }
+
     .nav-container {
         padding: 0 1rem;
     }
@@ -2186,11 +2267,41 @@ section {
 
     .projects-container {
         width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .project-card {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .project-content {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    .project-content-wrapper {
+        width: 300%;
+        min-width: 300%;
+        max-width: 300%;
+    }
+
+    .project-content-page {
+        width: calc(100% / 3);
+        min-width: calc(100% / 3);
+        max-width: calc(100% / 3);
     }
 
     .projects .container {
         padding: 0 1rem;
         max-width: 100%;
+        width: 100%;
+        overflow-x: hidden;
+        box-sizing: border-box;
     }
 
     .projects .section-title,
@@ -2350,6 +2461,14 @@ section {
 
     .section-title {
         font-size: 1.5rem;
+    }
+
+    .scroll-to-top {
+        width: 40px;
+        height: 40px;
+        bottom: 1rem;
+        right: 1rem;
+        font-size: 1rem;
     }
 
     .nav-logo {

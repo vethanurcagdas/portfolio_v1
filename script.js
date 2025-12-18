@@ -793,8 +793,19 @@ if (heroTitle) {
 // Add active state to navigation links based on scroll position
 const sections = document.querySelectorAll('section[id]');
 
+// Scroll to Top Button
+const scrollToTopBtn = document.getElementById('scrollToTop');
+
+// Show/hide scroll to top button based on scroll position
 window.addEventListener('scroll', () => {
     const scrollY = window.pageYOffset;
+    
+    // Show button when scrolled down 300px
+    if (scrollY > 300) {
+        scrollToTopBtn.classList.add('visible');
+    } else {
+        scrollToTopBtn.classList.remove('visible');
+    }
     
     sections.forEach(section => {
         const sectionHeight = section.offsetHeight;
@@ -810,6 +821,16 @@ window.addEventListener('scroll', () => {
         }
     });
 });
+
+// Scroll to Top Button Click Handler
+if (scrollToTopBtn) {
+    scrollToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+}
 
 // Add CSS for active nav link
 const style = document.createElement('style');
