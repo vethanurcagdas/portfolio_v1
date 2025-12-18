@@ -408,8 +408,101 @@ animateElements.forEach(el => {
 
 // Split project content into pages (3 pages for mobile, normal for desktop)
 function splitProjectContentIntoPages() {
-    // Function disabled - keeping original layout
-    return;
+    const projectContents = document.querySelectorAll('.project-content');
+    const isMobile = window.innerWidth <= 968;
+    
+    projectContents.forEach((content) => {
+        // Check if already wrapped
+        if (content.querySelector('.project-content-wrapper')) {
+            return;
+        }
+        
+        // Get all child elements
+        const children = Array.from(content.children);
+        if (children.length === 0) return;
+        
+        // Create wrapper
+        const wrapper = document.createElement('div');
+        wrapper.className = 'project-content-wrapper';
+        
+        if (isMobile) {
+            // Mobile: Split into 3 pages with same structure
+            // Page 1: Tags + Title + Description (first part)
+            // Page 2: Description (rest) + Features
+            // Page 3: Tech + Buttons
+            
+            // Find elements
+            const tags = children.find(el => el.classList.contains('project-tags'));
+            const title = children.find(el => el.classList.contains('project-title'));
+            const description = children.find(el => el.classList.contains('project-description'));
+            const features = children.find(el => el.classList.contains('project-features'));
+            const tech = children.find(el => el.classList.contains('project-tech'));
+            const links = children.find(el => el.classList.contains('project-links'));
+            
+            // Page 1: Tags + Title + Description (first part)
+            const page1 = document.createElement('div');
+            page1.className = 'project-content-page';
+            if (tags) {
+                const tagsClone = tags.cloneNode(true);
+                page1.appendChild(tagsClone);
+            }
+            if (title) {
+                const titleClone = title.cloneNode(true);
+                page1.appendChild(titleClone);
+            }
+            if (description) {
+                const descClone = description.cloneNode(true);
+                const text = descClone.textContent || descClone.innerText || '';
+                const midPoint = Math.floor(text.length / 2);
+                const firstPart = text.substring(0, midPoint);
+                descClone.textContent = firstPart + '...';
+                page1.appendChild(descClone);
+            }
+            wrapper.appendChild(page1);
+            
+            // Page 2: Description (rest) + Features
+            const page2 = document.createElement('div');
+            page2.className = 'project-content-page';
+            if (description) {
+                const descClone = description.cloneNode(true);
+                const text = descClone.textContent || descClone.innerText || '';
+                const midPoint = Math.floor(text.length / 2);
+                const secondPart = text.substring(midPoint);
+                descClone.textContent = '...' + secondPart;
+                page2.appendChild(descClone);
+            }
+            if (features) {
+                const featuresClone = features.cloneNode(true);
+                page2.appendChild(featuresClone);
+            }
+            wrapper.appendChild(page2);
+            
+            // Page 3: Tech + Buttons
+            const page3 = document.createElement('div');
+            page3.className = 'project-content-page';
+            if (tech) {
+                const techClone = tech.cloneNode(true);
+                page3.appendChild(techClone);
+            }
+            if (links) {
+                const linksClone = links.cloneNode(true);
+                page3.appendChild(linksClone);
+            }
+            wrapper.appendChild(page3);
+            
+            // Clear original content and add wrapper
+            content.innerHTML = '';
+            content.appendChild(wrapper);
+        } else {
+            // Desktop: Keep normal layout, just wrap in container
+            children.forEach(child => {
+                const cloned = child.cloneNode(true);
+                wrapper.appendChild(cloned);
+            });
+            content.innerHTML = '';
+            content.appendChild(wrapper);
+        }
+    });
 }
 
 // Project Content Scroll Indicators

@@ -1898,12 +1898,95 @@ section {
     }
 
     .project-content {
-        overflow: visible;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        padding: 0;
+        margin: 0;
         width: 100%;
         max-width: 100%;
+        min-width: 0;
         position: relative;
+        scroll-snap-type: x mandatory;
+        scroll-padding: 0;
+        scroll-behavior: smooth;
         box-sizing: border-box;
         display: block;
+    }
+
+    .project-content::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Mobile: 3 pages layout */
+    .project-content-wrapper {
+        display: flex;
+        width: 300%;
+        min-width: 300%;
+        max-width: 300%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        position: relative;
+        box-sizing: border-box;
+    }
+
+    .project-content-page {
+        width: 33.333333%;
+        min-width: 33.333333%;
+        max-width: 33.333333%;
+        flex-shrink: 0;
+        flex-grow: 0;
+        padding: 0 1rem;
+        margin: 0;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        height: 100%;
+        overflow: visible;
+        position: relative;
+    }
+
+    .project-content-page > * {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 1rem;
+        box-sizing: border-box;
+        display: block;
+    }
+
+    .project-content-page .project-tags {
+        margin-bottom: 1rem;
+    }
+
+    .project-content-page .project-title {
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+    }
+
+    .project-content-page .project-description {
+        margin-bottom: 1rem;
+        line-height: 1.6;
+    }
+
+    .project-content-page .project-features {
+        margin-bottom: 1rem;
+    }
+
+    .project-content-page .project-tech {
+        margin-bottom: 1rem;
+    }
+
+    .project-content-page .project-links {
+        margin-top: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
     }
 
     .project-content::-webkit-scrollbar-track {
@@ -2291,6 +2374,22 @@ section {
         overflow-x: auto;
         overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+    }
+
+    .project-content-wrapper {
+        display: flex;
+        width: 300%;
+        min-width: 300%;
+        max-width: 300%;
+    }
+
+    .project-content-page {
+        width: 33.333333%;
+        min-width: 33.333333%;
+        max-width: 33.333333%;
+        flex-shrink: 0;
+        padding: 0 0.75rem;
     }
 
     .projects-container {
