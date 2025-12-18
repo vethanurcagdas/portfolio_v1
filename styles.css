@@ -638,15 +638,25 @@ section {
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
     scrollbar-color: var(--primary-color) transparent;
-    padding-right: 1rem;
-    margin-right: -1rem;
+    padding-right: 0;
+    margin-right: 0;
     position: relative;
+    scroll-snap-type: x mandatory;
 }
 
 .project-content-wrapper {
-    display: inline-block;
-    min-width: 100%;
-    width: max-content;
+    display: flex;
+    width: 300%;
+    min-width: 300%;
+}
+
+.project-content-page {
+    width: 33.333%;
+    min-width: 33.333%;
+    flex-shrink: 0;
+    padding-right: 2rem;
+    scroll-snap-align: start;
+    box-sizing: border-box;
 }
 
 .project-content::-webkit-scrollbar {
@@ -1580,6 +1590,22 @@ section {
         margin-bottom: -0.5rem;
         width: 100%;
         position: relative;
+        scroll-snap-type: x mandatory;
+    }
+
+    .project-content-wrapper {
+        display: flex;
+        width: 300%;
+        min-width: 300%;
+    }
+
+    .project-content-page {
+        width: 33.333%;
+        min-width: 33.333%;
+        flex-shrink: 0;
+        padding-right: 1rem;
+        scroll-snap-align: start;
+        box-sizing: border-box;
     }
 
     .project-content::-webkit-scrollbar {

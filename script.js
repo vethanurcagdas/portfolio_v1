@@ -406,19 +406,67 @@ animateElements.forEach(el => {
     observer.observe(el);
 });
 
+// Split project content into 3 pages
+function splitProjectContentIntoPages() {
+    const projectContents = document.querySelectorAll('.project-content');
+    
+    projectContents.forEach((content) => {
+        // Check if already wrapped
+        if (content.querySelector('.project-content-wrapper')) {
+            return;
+        }
+        
+        // Get all child elements
+        const children = Array.from(content.children);
+        if (children.length === 0) return;
+        
+        // Create wrapper
+        const wrapper = document.createElement('div');
+        wrapper.className = 'project-content-wrapper';
+        
+        // Split children into 3 groups
+        const itemsPerPage = Math.ceil(children.length / 3);
+        const pages = [];
+        
+        for (let i = 0; i < 3; i++) {
+            const page = document.createElement('div');
+            page.className = 'project-content-page';
+            pages.push(page);
+            
+            const startIndex = i * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, children.length);
+            
+            for (let j = startIndex; j < endIndex; j++) {
+                if (children[j]) {
+                    page.appendChild(children[j].cloneNode(true));
+                }
+            }
+            
+            wrapper.appendChild(page);
+        }
+        
+        // Clear original content and add wrapper
+        content.innerHTML = '';
+        content.appendChild(wrapper);
+    });
+}
+
 // Project Content Scroll Indicators
 function initProjectScrollIndicators() {
     const projectContents = document.querySelectorAll('.project-content');
     
     projectContents.forEach((content, index) => {
         // Remove existing indicator if any
-        const existingIndicator = content.parentElement.querySelector('.project-scroll-indicator');
+        const projectCard = content.closest('.project-card');
+        const existingIndicator = projectCard ? projectCard.querySelector('.project-scroll-indicator') : null;
         if (existingIndicator) {
             existingIndicator.remove();
         }
         
-        // Check if content is scrollable (with a small threshold)
-        const isScrollable = content.scrollWidth > content.clientWidth + 10;
+        // Always create indicator for desktop (3 pages)
+        // For mobile, check if scrollable
+        const isMobile = window.innerWidth <= 968;
+        const isScrollable = !isMobile || (content.scrollWidth > content.clientWidth + 10);
         
         if (isScrollable) {
             // Create indicator container
@@ -426,8 +474,8 @@ function initProjectScrollIndicators() {
             indicator.className = 'project-scroll-indicator';
             indicator.setAttribute('data-project-index', index);
             
-            // Calculate number of pages
-            const pageCount = Math.max(1, Math.ceil(content.scrollWidth / content.clientWidth));
+            // Always 3 pages for desktop, calculate for mobile
+            const pageCount = isMobile ? Math.max(1, Math.ceil(content.scrollWidth / content.clientWidth)) : 3;
             
             // Create dots
             for (let i = 0; i < pageCount; i++) {
@@ -438,7 +486,6 @@ function initProjectScrollIndicators() {
             }
             
             // Insert indicator after project-content (inside project-card)
-            const projectCard = content.closest('.project-card');
             if (projectCard) {
                 projectCard.appendChild(indicator);
             } else {
@@ -460,8 +507,9 @@ function initProjectScrollIndicators() {
             const handleResize = () => {
                 clearTimeout(resizeTimeout);
                 resizeTimeout = setTimeout(() => {
-                    const newIsScrollable = content.scrollWidth > content.clientWidth + 10;
-                    const newPageCount = Math.max(1, Math.ceil(content.scrollWidth / content.clientWidth));
+                    const newIsMobile = window.innerWidth <= 968;
+                    const newIsScrollable = !newIsMobile || (content.scrollWidth > content.clientWidth + 10);
+                    const newPageCount = newIsMobile ? Math.max(1, Math.ceil(content.scrollWidth / content.clientWidth)) : 3;
                     
                     if (!newIsScrollable) {
                         indicator.remove();
@@ -505,11 +553,16 @@ function updateScrollIndicator(content, indicator, pageCount) {
     });
 }
 
-// Initialize scroll indicators when DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initProjectScrollIndicators);
-} else {
+// Initialize project pages and scroll indicators when DOM is ready
+function initProjects() {
+    splitProjectContentIntoPages();
     initProjectScrollIndicators();
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initProjects);
+} else {
+    initProjects();
 }
 
 // Skill bars animation
