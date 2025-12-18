@@ -832,6 +832,17 @@ if (scrollToTopBtn) {
     });
 }
 
+// Contact Social Media Buttons
+const contactButtons = document.querySelectorAll('.contact-button');
+contactButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const url = button.getAttribute('data-url');
+        if (url) {
+            window.open(url, '_blank', 'noopener,noreferrer');
+        }
+    });
+});
+
 // Add CSS for active nav link
 const style = document.createElement('style');
 style.textContent = `

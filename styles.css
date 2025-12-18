@@ -1200,6 +1200,9 @@ section {
 
 .education-content {
     flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 .education-degree {
@@ -1207,6 +1210,8 @@ section {
     font-weight: 600;
     color: var(--text-primary);
     margin-bottom: 0.5rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .education-major {
@@ -1214,24 +1219,32 @@ section {
     color: var(--primary-color);
     font-weight: 500;
     margin-bottom: 0.5rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .education-school {
     font-size: 0.95rem;
     color: var(--text-secondary);
     margin-bottom: 0.25rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .education-duration {
     font-size: 0.9rem;
     color: var(--text-muted);
     margin-bottom: 0.5rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .education-note {
     font-size: 0.85rem;
     color: var(--text-muted);
     font-style: italic;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 /* Volunteering Section */
@@ -1519,6 +1532,28 @@ section {
     align-items: flex-start;
 }
 
+.contact-button {
+    background: var(--dark-bg);
+    border: 1px solid var(--dark-surface-light);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: var(--transition);
+    width: 100%;
+    text-align: left;
+}
+
+.contact-button:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-md);
+    background: var(--dark-surface);
+}
+
+.contact-button:active {
+    transform: translateY(-2px);
+}
+
 .contact-icon {
     width: 50px;
     height: 50px;
@@ -1532,10 +1567,20 @@ section {
     flex-shrink: 0;
 }
 
+.contact-details {
+    flex: 1;
+}
+
 .contact-details h3 {
     font-size: 1.1rem;
     margin-bottom: 0.5rem;
     color: var(--text-primary);
+}
+
+.contact-details p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin: 0;
 }
 
 .contact-details a {
@@ -1626,23 +1671,27 @@ section {
     position: fixed;
     bottom: 2rem;
     right: 2rem;
-    width: 50px;
+    min-width: 50px;
     height: 50px;
+    padding: 0 1rem;
     background: var(--gradient-1);
     border: none;
-    border-radius: 50%;
+    border-radius: 25px;
     color: white;
     font-size: 1.2rem;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 0.5rem;
     opacity: 0;
     visibility: hidden;
     transform: translateY(20px);
     transition: all 0.3s ease;
     z-index: 1000;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    font-family: inherit;
+    font-weight: 500;
 }
 
 .scroll-to-top.visible {
@@ -1655,10 +1704,24 @@ section {
     transform: translateY(-5px);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
     background: var(--gradient-2);
+    min-width: 120px;
 }
 
 .scroll-to-top:active {
     transform: translateY(-2px);
+}
+
+.scroll-to-top-text {
+    font-size: 0.9rem;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: none;
+}
+
+.scroll-to-top:hover .scroll-to-top-text {
+    opacity: 1;
+    display: inline;
 }
 
 /* Responsive Design */
@@ -2049,10 +2112,32 @@ section {
         padding: 1.5rem;
         flex-direction: column;
         text-align: center;
+        align-items: center;
+        gap: 1rem;
     }
 
     .education-icon {
         margin: 0 auto;
+        width: 60px;
+        height: 60px;
+        flex-shrink: 0;
+    }
+
+    .education-content {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .education-degree,
+    .education-major,
+    .education-school,
+    .education-duration,
+    .education-note {
+        text-align: center;
+        width: 100%;
     }
 
     .volunteering-grid {
@@ -2181,11 +2266,23 @@ section {
     }
 
     .scroll-to-top {
+        min-width: 45px;
         width: 45px;
         height: 45px;
+        padding: 0;
         bottom: 1.5rem;
         right: 1.5rem;
         font-size: 1.1rem;
+        border-radius: 50%;
+    }
+
+    .scroll-to-top:hover {
+        min-width: 45px;
+        width: 45px;
+    }
+
+    .scroll-to-top-text {
+        display: none !important;
     }
 
     .nav-container {
@@ -2451,14 +2548,38 @@ section {
 
     .education-card {
         padding: 1.25rem;
+        gap: 0.75rem;
+    }
+
+    .education-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.25rem;
     }
 
     .education-degree {
         font-size: 1rem;
+        text-align: center;
+    }
+
+    .education-major {
+        font-size: 0.95rem;
+        text-align: center;
     }
 
     .education-school {
         font-size: 0.9rem;
+        text-align: center;
+    }
+
+    .education-duration {
+        font-size: 0.85rem;
+        text-align: center;
+    }
+
+    .education-note {
+        font-size: 0.8rem;
+        text-align: center;
     }
 
     .contact-item {
@@ -2468,8 +2589,21 @@ section {
         gap: 0.75rem;
     }
 
+    .contact-button {
+        padding: 1rem;
+        text-align: center;
+    }
+
     .contact-icon {
         margin: 0 auto;
+    }
+
+    .contact-details {
+        text-align: center;
+    }
+
+    .contact-details p {
+        text-align: center;
     }
 
     .contact-form {
@@ -2529,11 +2663,23 @@ section {
     }
 
     .scroll-to-top {
+        min-width: 40px;
         width: 40px;
         height: 40px;
+        padding: 0;
         bottom: 1rem;
         right: 1rem;
         font-size: 1rem;
+        border-radius: 50%;
+    }
+
+    .scroll-to-top:hover {
+        min-width: 40px;
+        width: 40px;
+    }
+
+    .scroll-to-top-text {
+        display: none !important;
     }
 
     .nav-logo {
@@ -2561,7 +2707,7 @@ section {
         font-size: 0.95rem;
     }
 
-    .contact-item a {
+    .contact-details p {
         font-size: 0.85rem;
     }
 }
