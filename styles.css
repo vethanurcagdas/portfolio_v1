@@ -640,6 +640,13 @@ section {
     scrollbar-color: var(--primary-color) transparent;
     padding-right: 1rem;
     margin-right: -1rem;
+    position: relative;
+}
+
+.project-content-wrapper {
+    display: inline-block;
+    min-width: 100%;
+    width: max-content;
 }
 
 .project-content::-webkit-scrollbar {
@@ -657,6 +664,39 @@ section {
 
 .project-content::-webkit-scrollbar-thumb:hover {
     background: var(--secondary-color);
+}
+
+/* Project Scroll Indicator - Desktop & Mobile */
+.project-scroll-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    padding: 0.75rem 0;
+    width: 100%;
+}
+
+.scroll-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    opacity: 0.4;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.scroll-dot.active {
+    background: var(--primary-color);
+    opacity: 1;
+    width: 10px;
+    height: 10px;
+    box-shadow: 0 0 8px rgba(99, 102, 241, 0.5);
+}
+
+[data-theme="light"] .scroll-dot.active {
+    box-shadow: 0 0 8px rgba(45, 80, 22, 0.4);
 }
 
 .project-card.featured {
@@ -1563,6 +1603,32 @@ section {
 
     .project-content > * {
         white-space: normal;
+    }
+
+    /* Project Scroll Indicator - Mobile */
+    .project-scroll-indicator {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        padding: 0.5rem 0;
+    }
+
+    .scroll-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--text-muted);
+        opacity: 0.4;
+        transition: all 0.3s ease;
+    }
+
+    .scroll-dot.active {
+        background: var(--primary-color);
+        opacity: 1;
+        width: 10px;
+        height: 10px;
     }
 
     .project-card:last-child {

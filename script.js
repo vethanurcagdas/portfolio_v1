@@ -406,6 +406,112 @@ animateElements.forEach(el => {
     observer.observe(el);
 });
 
+// Project Content Scroll Indicators
+function initProjectScrollIndicators() {
+    const projectContents = document.querySelectorAll('.project-content');
+    
+    projectContents.forEach((content, index) => {
+        // Remove existing indicator if any
+        const existingIndicator = content.parentElement.querySelector('.project-scroll-indicator');
+        if (existingIndicator) {
+            existingIndicator.remove();
+        }
+        
+        // Check if content is scrollable (with a small threshold)
+        const isScrollable = content.scrollWidth > content.clientWidth + 10;
+        
+        if (isScrollable) {
+            // Create indicator container
+            const indicator = document.createElement('div');
+            indicator.className = 'project-scroll-indicator';
+            indicator.setAttribute('data-project-index', index);
+            
+            // Calculate number of pages
+            const pageCount = Math.max(1, Math.ceil(content.scrollWidth / content.clientWidth));
+            
+            // Create dots
+            for (let i = 0; i < pageCount; i++) {
+                const dot = document.createElement('span');
+                dot.className = 'scroll-dot';
+                if (i === 0) dot.classList.add('active');
+                indicator.appendChild(dot);
+            }
+            
+            // Insert indicator after project-content (inside project-card)
+            const projectCard = content.closest('.project-card');
+            if (projectCard) {
+                projectCard.appendChild(indicator);
+            } else {
+                content.parentElement.appendChild(indicator);
+            }
+            
+            // Update indicator on scroll
+            const updateIndicator = () => {
+                updateScrollIndicator(content, indicator, pageCount);
+            };
+            
+            content.addEventListener('scroll', updateIndicator);
+            
+            // Initial update
+            updateIndicator();
+            
+            // Update on resize
+            let resizeTimeout;
+            const handleResize = () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    const newIsScrollable = content.scrollWidth > content.clientWidth + 10;
+                    const newPageCount = Math.max(1, Math.ceil(content.scrollWidth / content.clientWidth));
+                    
+                    if (!newIsScrollable) {
+                        indicator.remove();
+                    } else if (newPageCount !== pageCount) {
+                        // Recreate indicator if page count changed
+                        indicator.remove();
+                        initProjectScrollIndicators();
+                    } else {
+                        updateIndicator();
+                    }
+                }, 250);
+            };
+            
+            window.addEventListener('resize', handleResize);
+        }
+    });
+}
+
+function updateScrollIndicator(content, indicator, pageCount) {
+    const scrollLeft = content.scrollLeft;
+    const clientWidth = content.clientWidth;
+    const scrollWidth = content.scrollWidth;
+    const maxScroll = scrollWidth - clientWidth;
+    
+    if (maxScroll <= 0) {
+        return;
+    }
+    
+    // Calculate current page (0-indexed)
+    const scrollPercentage = scrollLeft / maxScroll;
+    const currentPage = Math.min(pageCount - 1, Math.round(scrollPercentage * (pageCount - 1)));
+    
+    // Update dots
+    const dots = indicator.querySelectorAll('.scroll-dot');
+    dots.forEach((dot, index) => {
+        if (index === currentPage) {
+            dot.classList.add('active');
+        } else {
+            dot.classList.remove('active');
+        }
+    });
+}
+
+// Initialize scroll indicators when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initProjectScrollIndicators);
+} else {
+    initProjectScrollIndicators();
+}
+
 // Skill bars animation
 const skillBars = document.querySelectorAll('.skill-progress');
 const skillObserver = new IntersectionObserver((entries) => {
