@@ -1637,10 +1637,72 @@ section {
     .about-content {
         grid-template-columns: 1fr;
         gap: 2rem;
+        text-align: center;
+    }
+
+    .about-text {
+        order: 2;
+    }
+
+    .about-text p {
+        font-size: 1rem;
+        text-align: left;
     }
 
     .about-image {
         max-width: 100%;
+        order: 1;
+        margin-bottom: 1rem;
+    }
+
+    .image-gallery {
+        max-width: 100%;
+        width: 100%;
+        aspect-ratio: 3/4;
+        margin: 0 auto;
+    }
+
+    .gallery-prev,
+    .gallery-next {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+
+    .gallery-prev {
+        left: 0.5rem;
+    }
+
+    .gallery-next {
+        right: 0.5rem;
+    }
+
+    .gallery-indicators {
+        bottom: 0.75rem;
+    }
+
+    .gallery-dot {
+        width: 8px;
+        height: 8px;
+    }
+
+    .gallery-dot.active {
+        width: 10px;
+        height: 10px;
+    }
+
+    .about-stats {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .stat-item {
+        padding: 1.25rem;
+    }
+
+    .stat-number {
+        font-size: 2rem;
     }
 
     /* Projects Vertical Scroll on Mobile */
@@ -2018,9 +2080,19 @@ section {
         font-size: 0.95rem;
     }
 
+    .about-content {
+        gap: 1.5rem;
+    }
+
+    .about-text p {
+        font-size: 0.95rem;
+        margin-bottom: 1rem;
+    }
+
     .about-stats {
         grid-template-columns: 1fr;
-        gap: 1rem;
+        gap: 0.75rem;
+        margin-top: 1rem;
     }
 
     .stat-item {
@@ -2028,7 +2100,31 @@ section {
     }
 
     .stat-number {
-        font-size: 2rem;
+        font-size: 1.75rem;
+    }
+
+    .stat-label {
+        font-size: 0.85rem;
+    }
+
+    .image-gallery {
+        max-width: 100%;
+        aspect-ratio: 3/4;
+    }
+
+    .gallery-prev,
+    .gallery-next {
+        width: 30px;
+        height: 30px;
+        font-size: 0.9rem;
+    }
+
+    .gallery-prev {
+        left: 0.25rem;
+    }
+
+    .gallery-next {
+        right: 0.25rem;
     }
 
     .project-card {
