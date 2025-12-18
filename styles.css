@@ -749,6 +749,9 @@ section {
     transition: var(--transition);
     position: relative;
     overflow: hidden;
+    /* Isolate each project card to prevent overflow from other projects */
+    isolation: isolate;
+    contain: layout style;
 }
 
 .project-content {
@@ -760,6 +763,9 @@ section {
     padding-right: 1rem;
     margin-right: -1rem;
     position: relative;
+    box-sizing: border-box;
+    /* Prevent content from overflowing parent */
+    contain: layout style;
 }
 
 /* Desktop: Normal layout, only scroll if content overflows */
@@ -1779,7 +1785,7 @@ section {
     }
 
     .projects .container {
-        padding: 0 1.5rem;
+        padding: 0;
         max-width: 100%;
         width: 100%;
         overflow-x: hidden;
@@ -1788,7 +1794,7 @@ section {
 
     .projects .section-title,
     .projects .section-subtitle {
-        padding: 0;
+        padding: 0 1.5rem;
     }
 
     .projects-container {
@@ -1796,6 +1802,11 @@ section {
         width: 100%;
         max-width: 100%;
         overflow-x: hidden;
+        overflow-y: visible;
+        /* Prevent horizontal overflow from child elements */
+        contain: layout;
+        padding: 0;
+        margin: 0;
     }
 
     .project-card,
@@ -1805,10 +1816,18 @@ section {
         width: 100%;
         max-width: 100%;
         margin-bottom: 2rem;
+        margin-left: 0;
+        margin-right: 0;
         padding: 1.5rem;
         overflow: hidden;
         display: grid;
         box-sizing: border-box;
+        position: relative;
+        /* Isolate each project card to prevent overflow from other projects */
+        isolation: isolate;
+        contain: layout style;
+        /* Ensure card doesn't exceed container width */
+        min-width: 0;
     }
 
     .project-image {
@@ -1829,10 +1848,18 @@ section {
         margin: 0;
         width: 100%;
         max-width: 100%;
+        min-width: 0;
         position: relative;
         scroll-snap-type: x mandatory;
         scroll-padding: 0;
         scroll-behavior: smooth;
+        box-sizing: border-box;
+        /* Prevent content from overflowing parent */
+        contain: layout style;
+        /* Clip content to prevent spillover */
+        clip-path: inset(0);
+        /* Ensure no horizontal overflow */
+        overflow-clip-margin: 0;
     }
 
     .project-content::-webkit-scrollbar {
@@ -1849,6 +1876,11 @@ section {
         margin: 0;
         padding: 0;
         position: relative;
+        box-sizing: border-box;
+        /* Ensure wrapper doesn't overflow parent */
+        will-change: transform;
+        /* Prevent any overflow */
+        contain: strict;
     }
 
     .project-content-page {
@@ -1868,6 +1900,12 @@ section {
         height: 100%;
         overflow: hidden;
         position: relative;
+        /* Ensure no content spills out */
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        /* Prevent any horizontal overflow */
+        min-width: 0;
+        contain: layout style;
     }
 
     .project-content-page > * {
@@ -1877,11 +1915,19 @@ section {
         box-sizing: border-box;
         padding-left: 0;
         padding-right: 0;
+        overflow: hidden;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
 
     .project-content-page {
         padding-left: 0;
         padding-right: 0;
+    }
+
+    /* Ensure project card doesn't show overflow from other projects */
+    .project-card {
+        isolation: isolate;
     }
 
     .project-content-page .project-tags {
@@ -2249,8 +2295,13 @@ section {
         padding: 1.25rem;
         width: 100%;
         max-width: 100%;
+        min-width: 0;
         gap: 1rem;
         margin-bottom: 1.5rem;
+        margin-left: 0;
+        margin-right: 0;
+        isolation: isolate;
+        contain: layout style;
     }
 
     .project-image {
@@ -2269,35 +2320,49 @@ section {
         width: 100%;
         max-width: 100%;
         overflow-x: hidden;
+        padding: 0;
+        margin: 0;
+        contain: layout;
     }
 
     .project-card {
         width: 100%;
         max-width: 100%;
+        min-width: 0;
         box-sizing: border-box;
+        isolation: isolate;
+        contain: layout style;
+        margin-left: 0;
+        margin-right: 0;
     }
 
     .project-content {
         width: 100%;
         max-width: 100%;
+        min-width: 0;
         overflow-x: auto;
         overflow-y: hidden;
+        contain: layout style;
+        clip-path: inset(0);
     }
 
     .project-content-wrapper {
         width: 300%;
         min-width: 300%;
         max-width: 300%;
+        contain: strict;
     }
 
     .project-content-page {
         width: calc(100% / 3);
         min-width: calc(100% / 3);
         max-width: calc(100% / 3);
+        min-width: 0;
+        contain: layout style;
     }
 
     .projects .container {
-        padding: 0 1rem;
+        padding: 0;
         max-width: 100%;
         width: 100%;
         overflow-x: hidden;
@@ -2306,7 +2371,7 @@ section {
 
     .projects .section-title,
     .projects .section-subtitle {
-        padding: 0;
+        padding: 0 1rem;
     }
 
     .project-title {
