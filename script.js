@@ -414,20 +414,46 @@ function splitProjectContentIntoPages() {
     projectContents.forEach((content) => {
         // Remove existing wrapper if any (to allow re-splitting on resize)
         const existingWrapper = content.querySelector('.project-content-wrapper');
-        if (existingWrapper && isMobile) {
-            // If mobile and wrapper exists, check if it needs to be recreated
-            const pages = existingWrapper.querySelectorAll('.project-content-page');
-            if (pages.length === 3) {
-                return; // Already correctly split
+        
+        // If wrapper exists, restore original children first
+        if (existingWrapper) {
+            // Check if we need to change layout (mobile <-> desktop switch)
+            const hasPages = existingWrapper.querySelector('.project-content-page');
+            const needsChange = (isMobile && !hasPages) || (!isMobile && hasPages);
+            
+            if (needsChange || !isMobile) {
+                // Restore original children from wrapper
+                const wrapperChildren = Array.from(existingWrapper.children);
+                if (hasPages) {
+                    // Mobile to Desktop: collect all content from pages
+                    const allContent = [];
+                    wrapperChildren.forEach(page => {
+                        Array.from(page.children).forEach(child => {
+                            allContent.push(child.cloneNode(true));
+                        });
+                    });
+                    content.innerHTML = '';
+                    allContent.forEach(child => content.appendChild(child));
+                } else {
+                    // Desktop to Mobile: just move children back
+                    content.innerHTML = '';
+                    wrapperChildren.forEach(child => {
+                        content.appendChild(child.cloneNode(true));
+                    });
+                }
+                existingWrapper.remove();
+            } else if (isMobile && hasPages) {
+                // Already correctly set up for mobile
+                const pages = existingWrapper.querySelectorAll('.project-content-page');
+                if (pages.length === 3) {
+                    return; // Already correctly split
+                }
+                // Wrong number of pages, recreate
+                existingWrapper.remove();
             }
-            // Otherwise, remove and recreate
-            existingWrapper.remove();
-        } else if (existingWrapper && !isMobile) {
-            // Desktop: just keep the wrapper as is
-            return;
         }
         
-        // Get all child elements
+        // Get all child elements (original content)
         const children = Array.from(content.children);
         if (children.length === 0) return;
         
@@ -504,13 +530,9 @@ function splitProjectContentIntoPages() {
             content.innerHTML = '';
             content.appendChild(wrapper);
         } else {
-            // Desktop: Keep normal layout, just wrap in container
-            children.forEach(child => {
-                const cloned = child.cloneNode(true);
-                wrapper.appendChild(cloned);
-            });
-            content.innerHTML = '';
-            content.appendChild(wrapper);
+            // Desktop: No wrapper needed, keep original layout
+            // Don't modify content for desktop
+            return;
         }
     });
 }
@@ -529,7 +551,9 @@ function initProjectScrollIndicators() {
         
         // Check if scrollable
         const isMobile = window.innerWidth <= 968;
-        const isScrollable = content.scrollWidth > content.clientWidth + 10;
+        const wrapper = content.querySelector('.project-content-wrapper');
+        const hasPages = wrapper && wrapper.querySelector('.project-content-page');
+        const isScrollable = hasPages ? (wrapper && wrapper.children.length > 1) : (content.scrollWidth > content.clientWidth + 10);
         
         if (isScrollable) {
             // Create indicator container
@@ -537,8 +561,15 @@ function initProjectScrollIndicators() {
             indicator.className = 'project-scroll-indicator';
             indicator.setAttribute('data-project-index', index);
             
-            // Calculate page count based on scroll width
-            const pageCount = isMobile ? 3 : Math.max(1, Math.ceil(content.scrollWidth / content.clientWidth));
+            // Calculate page count
+            let pageCount;
+            if (isMobile && hasPages) {
+                // Mobile: always 3 pages
+                pageCount = 3;
+            } else {
+                // Desktop: calculate based on scroll width
+                pageCount = Math.max(1, Math.ceil(content.scrollWidth / content.clientWidth));
+            }
             
             // Create dots
             for (let i = 0; i < pageCount; i++) {

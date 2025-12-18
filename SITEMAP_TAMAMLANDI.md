@@ -97,3 +97,4 @@
 **Tebrikler! Artık sadece beklemen gerekiyor. 1-2 hafta sonra Google'da arama yapanlar seni bulabilecek!** 🎉🔍
 
 
+

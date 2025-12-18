@@ -232,3 +232,4 @@ Arama: `site:vethanurcagdas.github.io/portfolio_v1`
 **Bu notları düzenli olarak kontrol et ve güncelle!** 📝✨
 
 
+

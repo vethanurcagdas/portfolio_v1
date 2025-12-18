@@ -97,3 +97,4 @@ Doğrulama tamamlandı. Şimdi Google'ın siteyi indexlemesi için sitemap gönd
 **Sitemap'i gönder ve 1-2 hafta bekle. Sonra Google'da arama yapanlar seni bulabilecek!** 🔍🚀
 
 
+

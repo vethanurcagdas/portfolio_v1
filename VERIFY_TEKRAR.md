@@ -56,3 +56,4 @@
 **Push yaptıktan sonra 2 dakika bekle, sonra Google Search Console'da tekrar "VERIFY" butonuna tıkla!** 🔄
 
 
+

@@ -101,3 +101,4 @@ Eğer sonuç görünüyorsa, site indexlenmiş demektir!
 **Google Search Console'a ekle ve birkaç hafta bekle. Sonra Google'da arama yapanlar seni bulabilecek!** 🔍
 
 
+

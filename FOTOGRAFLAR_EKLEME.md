@@ -64,3 +64,4 @@ Fotoğrafları ekledikten sonra:
 **Fotoğrafları `assets/images/` klasörüne kopyala ve siteyi yenile!** 📸✨
 
 
+

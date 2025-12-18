@@ -28,3 +28,4 @@ Ben tag'i ekledikten sonra:
 **"HTML tag" seçeneğine tıkla ve verilen tag'i kopyala, bana gönder!** 🔍
 
 
+
