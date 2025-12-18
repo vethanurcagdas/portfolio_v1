@@ -1864,10 +1864,8 @@ section {
         display: block;
         width: 100%;
         max-width: 100%;
-        overflow-x: hidden;
+        overflow-x: visible;
         overflow-y: visible;
-        /* Prevent horizontal overflow from child elements */
-        contain: layout;
         padding: 0;
         margin: 0;
     }
@@ -1889,6 +1887,10 @@ section {
         min-width: 0;
     }
 
+    .project-card {
+        overflow: visible;
+    }
+
     .project-image {
         width: 100%;
         height: 200px;
@@ -1899,7 +1901,7 @@ section {
 
     .project-content {
         overflow-x: auto;
-        overflow-y: hidden;
+        overflow-y: visible;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
         -ms-overflow-style: none;
@@ -1907,13 +1909,13 @@ section {
         margin: 0;
         width: 100%;
         max-width: 100%;
-        min-width: 0;
         position: relative;
         scroll-snap-type: x mandatory;
         scroll-padding: 0;
         scroll-behavior: smooth;
         box-sizing: border-box;
         display: block;
+        touch-action: pan-x;
     }
 
     .project-content::-webkit-scrollbar {
@@ -1926,11 +1928,11 @@ section {
         width: 300%;
         min-width: 300%;
         max-width: 300%;
-        height: 100%;
         margin: 0;
         padding: 0;
         position: relative;
         box-sizing: border-box;
+        flex-direction: row;
     }
 
     .project-content-page {
@@ -1947,7 +1949,6 @@ section {
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        height: 100%;
         overflow: visible;
         position: relative;
     }
@@ -2372,9 +2373,10 @@ section {
 
     .project-content {
         overflow-x: auto;
-        overflow-y: hidden;
+        overflow-y: visible;
         -webkit-overflow-scrolling: touch;
         scroll-snap-type: x mandatory;
+        touch-action: pan-x;
     }
 
     .project-content-wrapper {
@@ -2382,6 +2384,7 @@ section {
         width: 300%;
         min-width: 300%;
         max-width: 300%;
+        flex-direction: row;
     }
 
     .project-content-page {
@@ -2389,6 +2392,7 @@ section {
         min-width: 33.333333%;
         max-width: 33.333333%;
         flex-shrink: 0;
+        flex-grow: 0;
         padding: 0 0.75rem;
     }
 
