@@ -755,28 +755,19 @@ section {
 }
 
 .project-content {
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary-color) transparent;
-    padding-right: 1rem;
-    margin-right: -1rem;
+    /* Simple vertical layout - no horizontal scrolling */
+    display: block;
+    width: 100%;
     position: relative;
     box-sizing: border-box;
-    /* Prevent content from overflowing parent */
-    contain: layout style;
+    /* CRITICAL: Ensure visibility */
+    opacity: 1 !important;
+    visibility: visible !important;
 }
 
-/* Desktop: Normal layout, only scroll if content overflows */
-.project-content-wrapper {
-    display: block;
-    width: 100%;
-}
-
-.project-content-page {
-    width: 100%;
-    display: block;
+.project-content * {
+    opacity: 1 !important;
+    visibility: visible !important;
 }
 
 .project-content::-webkit-scrollbar {
@@ -1896,158 +1887,22 @@ section {
     }
 
     .project-content {
-        overflow-x: auto;
-        overflow-y: hidden;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-        padding: 0;
-        margin: 0;
+        /* Simple vertical layout - no horizontal scrolling on mobile */
+        display: block;
         width: 100%;
         max-width: 100%;
-        position: relative;
-        scroll-snap-type: x mandatory;
-        scroll-padding: 0;
-        scroll-behavior: smooth;
-        box-sizing: border-box;
-        display: block;
-        touch-action: pan-x;
-        /* Critical: Prevent any overflow */
-        overscroll-behavior-x: contain;
-    }
-
-    .project-content::-webkit-scrollbar {
-        display: none;
-    }
-
-    /* Mobile: 3 pages layout */
-    .project-content-wrapper {
-        display: flex;
-        width: 300%;
-        min-width: 300%;
-        max-width: 300%;
-        margin: 0;
+        overflow: visible;
         padding: 0;
-        position: relative;
-        box-sizing: border-box;
-        flex-direction: row;
-        flex-shrink: 0;
-        height: 100%;
-    }
-
-    .project-content-page {
-        /* Each page = exactly 1/3 of wrapper = 100% of parent (.project-content) */
-        /* Using 33.333333% ensures perfect 3-page layout */
-        width: 33.333333%;
-        min-width: 33.333333%;
-        max-width: 33.333333%;
-        flex: 0 0 33.333333%;
-        padding: 0 1rem;
         margin: 0;
-        scroll-snap-align: start;
-        scroll-snap-stop: always;
         box-sizing: border-box;
-        display: flex !important;
-        flex-direction: column;
-        justify-content: flex-start;
-        overflow: hidden;
-        position: relative;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        /* CRITICAL: Ensure visibility - override any JavaScript or Observer changes */
+        /* CRITICAL: Ensure visibility */
         opacity: 1 !important;
         visibility: visible !important;
-        transform: none !important;
     }
     
-    /* Ensure all children inside pages are visible */
-    .project-content-page * {
+    .project-content * {
         opacity: 1 !important;
         visibility: visible !important;
-    }
-
-    .project-content-page > * {
-        width: 100%;
-        max-width: 100%;
-        margin-bottom: 1rem;
-        box-sizing: border-box;
-        display: block;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-    }
-
-    .project-content-page .project-tags {
-        margin-bottom: 1rem;
-    }
-
-    .project-content-page .project-title {
-        margin-bottom: 1rem;
-        font-size: 1.5rem;
-    }
-
-    .project-content-page .project-description {
-        margin-bottom: 1rem;
-        line-height: 1.6;
-    }
-
-    .project-content-page .project-features {
-        margin-bottom: 1rem;
-    }
-
-    .project-content-page .project-tech {
-        margin-bottom: 1rem;
-    }
-
-    .project-content-page .project-links {
-        margin-top: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-
-    .project-content::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    .project-content::-webkit-scrollbar-thumb {
-        background: var(--primary-color);
-        border-radius: 3px;
-    }
-
-    .project-content-inner {
-        display: inline-block;
-        min-width: 100%;
-        width: max-content;
-    }
-
-    .project-content > * {
-        white-space: normal;
-    }
-
-    /* Project Scroll Indicator - Mobile */
-    .project-scroll-indicator {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 0.5rem;
-        margin-top: 1rem;
-        padding: 0.5rem 0;
-    }
-
-    .scroll-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: var(--text-muted);
-        opacity: 0.4;
-        transition: all 0.3s ease;
-    }
-
-    .scroll-dot.active {
-        background: var(--primary-color);
-        opacity: 1;
-        width: 10px;
-        height: 10px;
     }
 
     .project-card:last-child {
@@ -2395,25 +2250,23 @@ section {
         overscroll-behavior-x: contain;
     }
 
-    .project-content-wrapper {
-        display: flex;
-        width: 300%;
-        min-width: 300%;
-        max-width: 300%;
-        flex-direction: row;
-        flex-shrink: 0;
-        height: 100%;
+    .project-content {
+        /* Simple vertical layout - no horizontal scrolling */
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        overflow: visible;
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        /* CRITICAL: Ensure visibility */
+        opacity: 1 !important;
+        visibility: visible !important;
     }
-
-    .project-content-page {
-        width: 33.333333%;
-        min-width: 33.333333%;
-        max-width: 33.333333%;
-        flex: 0 0 33.333333%;
-        padding: 0 0.75rem;
-        overflow: hidden;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
+    
+    .project-content * {
+        opacity: 1 !important;
+        visibility: visible !important;
     }
 
     .projects-container {

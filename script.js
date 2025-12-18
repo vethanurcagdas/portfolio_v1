@@ -417,36 +417,16 @@ document.querySelectorAll('.project-card').forEach(card => {
     // Don't observe project-card with IntersectionObserver to prevent content hiding
 });
 
-// Split project content into pages (3 pages for mobile, normal for desktop)
-// COMPLETELY REWRITTEN to prevent content hiding issues
+// REMOVED: Page splitting function - using simple vertical scroll instead
+// This ensures content never disappears
 function splitProjectContentIntoPages() {
+    // Remove any existing wrappers and restore original content
     const projectContents = document.querySelectorAll('.project-content');
-    const isMobile = window.innerWidth <= 968;
     
     projectContents.forEach((content) => {
-        // Skip if already processed and correct
         const existingWrapper = content.querySelector('.project-content-wrapper');
-        if (existingWrapper && isMobile) {
-            const pages = existingWrapper.querySelectorAll('.project-content-page');
-            if (pages.length === 3) {
-                // Force visibility on all pages
-                pages.forEach(page => {
-                    page.style.opacity = '1';
-                    page.style.transform = 'none';
-                    page.style.visibility = 'visible';
-                    page.style.display = 'flex';
-                    // Ensure all children are visible
-                    page.querySelectorAll('*').forEach(child => {
-                        child.style.opacity = '1';
-                        child.style.visibility = 'visible';
-                    });
-                });
-                return;
-            }
-        }
-        
-        // Desktop: Remove wrapper if exists
-        if (!isMobile && existingWrapper) {
+        if (existingWrapper) {
+            // Restore original content from wrapper
             const allContent = [];
             existingWrapper.querySelectorAll('.project-content-page').forEach(page => {
                 Array.from(page.children).forEach(child => {
@@ -455,232 +435,23 @@ function splitProjectContentIntoPages() {
             });
             content.innerHTML = '';
             allContent.forEach(child => content.appendChild(child));
-            return;
         }
         
-        // Mobile: Create 3 pages
-        if (isMobile) {
-            // Remove existing wrapper
-            if (existingWrapper) {
-                existingWrapper.remove();
-            }
-            
-            // Get original children
-            const children = Array.from(content.children);
-            if (children.length === 0) return;
-            
-            // Find elements
-            const tags = children.find(el => el.classList.contains('project-tags'));
-            const title = children.find(el => el.classList.contains('project-title'));
-            const description = children.find(el => el.classList.contains('project-description'));
-            const features = children.find(el => el.classList.contains('project-features'));
-            const tech = children.find(el => el.classList.contains('project-tech'));
-            const links = children.find(el => el.classList.contains('project-links'));
-            
-            // Create wrapper
-            const wrapper = document.createElement('div');
-            wrapper.className = 'project-content-wrapper';
-            
-            // Page 1: Tags + Title + Description (first part)
-            const page1 = document.createElement('div');
-            page1.className = 'project-content-page';
-            page1.style.opacity = '1';
-            page1.style.visibility = 'visible';
-            page1.style.display = 'flex';
-            if (tags) {
-                const tagsClone = tags.cloneNode(true);
-                tagsClone.style.opacity = '1';
-                tagsClone.style.visibility = 'visible';
-                page1.appendChild(tagsClone);
-            }
-            if (title) {
-                const titleClone = title.cloneNode(true);
-                titleClone.style.opacity = '1';
-                titleClone.style.visibility = 'visible';
-                page1.appendChild(titleClone);
-            }
-            if (description) {
-                const descClone = description.cloneNode(true);
-                descClone.style.opacity = '1';
-                descClone.style.visibility = 'visible';
-                const text = descClone.textContent || descClone.innerText || '';
-                const midPoint = Math.floor(text.length / 2);
-                const firstPart = text.substring(0, midPoint);
-                descClone.textContent = firstPart + '...';
-                page1.appendChild(descClone);
-            }
-            wrapper.appendChild(page1);
-            
-            // Page 2: Description (rest) + Features
-            const page2 = document.createElement('div');
-            page2.className = 'project-content-page';
-            page2.style.opacity = '1';
-            page2.style.visibility = 'visible';
-            page2.style.display = 'flex';
-            if (description) {
-                const descClone = description.cloneNode(true);
-                descClone.style.opacity = '1';
-                descClone.style.visibility = 'visible';
-                const text = descClone.textContent || descClone.innerText || '';
-                const midPoint = Math.floor(text.length / 2);
-                const secondPart = text.substring(midPoint);
-                descClone.textContent = '...' + secondPart;
-                page2.appendChild(descClone);
-            }
-            if (features) {
-                const featuresClone = features.cloneNode(true);
-                featuresClone.style.opacity = '1';
-                featuresClone.style.visibility = 'visible';
-                page2.appendChild(featuresClone);
-            }
-            wrapper.appendChild(page2);
-            
-            // Page 3: Tech + Buttons
-            const page3 = document.createElement('div');
-            page3.className = 'project-content-page';
-            page3.style.opacity = '1';
-            page3.style.visibility = 'visible';
-            page3.style.display = 'flex';
-            if (tech) {
-                const techClone = tech.cloneNode(true);
-                techClone.style.opacity = '1';
-                techClone.style.visibility = 'visible';
-                page3.appendChild(techClone);
-            }
-            if (links) {
-                const linksClone = links.cloneNode(true);
-                linksClone.style.opacity = '1';
-                linksClone.style.visibility = 'visible';
-                page3.appendChild(linksClone);
-            }
-            wrapper.appendChild(page3);
-            
-            // Clear and add wrapper
-            content.innerHTML = '';
-            content.appendChild(wrapper);
-            
-            // Force visibility on all pages and children
-            wrapper.querySelectorAll('.project-content-page').forEach(page => {
-                page.style.opacity = '1';
-                page.style.transform = 'none';
-                page.style.visibility = 'visible';
-                page.style.display = 'flex';
-                page.querySelectorAll('*').forEach(child => {
-                    child.style.opacity = '1';
-                    child.style.visibility = 'visible';
-                });
-            });
-        }
+        // Ensure all content is visible
+        content.style.opacity = '1';
+        content.style.visibility = 'visible';
+        content.querySelectorAll('*').forEach(child => {
+            child.style.opacity = '1';
+            child.style.visibility = 'visible';
+        });
     });
 }
 
-// Project Content Scroll Indicators
+// REMOVED: Scroll indicators - not needed with simple vertical scroll
 function initProjectScrollIndicators() {
-    const projectContents = document.querySelectorAll('.project-content');
-    
-    projectContents.forEach((content, index) => {
-        // Remove existing indicator if any
-        const projectCard = content.closest('.project-card');
-        const existingIndicator = projectCard ? projectCard.querySelector('.project-scroll-indicator') : null;
-        if (existingIndicator) {
-            existingIndicator.remove();
-        }
-        
-        // Check if scrollable
-        const isMobile = window.innerWidth <= 968;
-        const wrapper = content.querySelector('.project-content-wrapper');
-        const hasPages = wrapper && wrapper.querySelector('.project-content-page');
-        const isScrollable = hasPages ? (wrapper && wrapper.children.length > 1) : (content.scrollWidth > content.clientWidth + 10);
-        
-        if (isScrollable) {
-            // Create indicator container
-            const indicator = document.createElement('div');
-            indicator.className = 'project-scroll-indicator';
-            indicator.setAttribute('data-project-index', index);
-            
-            // Calculate page count
-            let pageCount;
-            if (isMobile && hasPages) {
-                // Mobile: always 3 pages
-                pageCount = 3;
-            } else {
-                // Desktop: calculate based on scroll width
-                pageCount = Math.max(1, Math.ceil(content.scrollWidth / content.clientWidth));
-            }
-            
-            // Create dots
-            for (let i = 0; i < pageCount; i++) {
-                const dot = document.createElement('span');
-                dot.className = 'scroll-dot';
-                if (i === 0) dot.classList.add('active');
-                indicator.appendChild(dot);
-            }
-            
-            // Insert indicator after project-content (inside project-card)
-            if (projectCard) {
-                projectCard.appendChild(indicator);
-            } else {
-                content.parentElement.appendChild(indicator);
-            }
-            
-            // Update indicator on scroll
-            const updateIndicator = () => {
-                updateScrollIndicator(content, indicator, pageCount);
-            };
-            
-            content.addEventListener('scroll', updateIndicator);
-            
-            // Initial update
-            updateIndicator();
-            
-            // Update on resize
-            let resizeTimeout;
-            const handleResize = () => {
-                clearTimeout(resizeTimeout);
-                resizeTimeout = setTimeout(() => {
-                    const newIsMobile = window.innerWidth <= 968;
-                    const newIsScrollable = !newIsMobile || (content.scrollWidth > content.clientWidth + 10);
-                    const newPageCount = newIsMobile ? Math.max(1, Math.ceil(content.scrollWidth / content.clientWidth)) : 3;
-                    
-                    if (!newIsScrollable) {
-                        indicator.remove();
-                    } else if (newPageCount !== pageCount) {
-                        // Recreate indicator if page count changed
-                        indicator.remove();
-                        initProjectScrollIndicators();
-                    } else {
-                        updateIndicator();
-                    }
-                }, 250);
-            };
-            
-            window.addEventListener('resize', handleResize);
-        }
-    });
-}
-
-function updateScrollIndicator(content, indicator, pageCount) {
-    const scrollLeft = content.scrollLeft;
-    const clientWidth = content.clientWidth;
-    const scrollWidth = content.scrollWidth;
-    const maxScroll = scrollWidth - clientWidth;
-    
-    if (maxScroll <= 0) {
-        return;
-    }
-    
-    // Calculate current page (0-indexed)
-    const scrollPercentage = scrollLeft / maxScroll;
-    const currentPage = Math.min(pageCount - 1, Math.round(scrollPercentage * (pageCount - 1)));
-    
-    // Update dots
-    const dots = indicator.querySelectorAll('.scroll-dot');
-    dots.forEach((dot, index) => {
-        if (index === currentPage) {
-            dot.classList.add('active');
-        } else {
-            dot.classList.remove('active');
-        }
+    // Remove all existing indicators
+    document.querySelectorAll('.project-scroll-indicator').forEach(indicator => {
+        indicator.remove();
     });
 }
 
@@ -765,27 +536,21 @@ function initImageGallery() {
     }
 }
 
-// Initialize project pages and scroll indicators when DOM is ready
+// Initialize projects - ensure content is always visible
 function initProjects() {
-    // Wait a bit for DOM to be fully ready
-    setTimeout(() => {
-        splitProjectContentIntoPages();
-        // Wait a bit more for wrapper to be created
-        setTimeout(() => {
-            initProjectScrollIndicators();
-            // Force visibility on all pages and their children
-            document.querySelectorAll('.project-content-page').forEach(page => {
-                page.style.opacity = '1';
-                page.style.transform = 'none';
-                page.style.visibility = 'visible';
-                page.style.display = 'flex';
-                page.querySelectorAll('*').forEach(child => {
-                    child.style.opacity = '1';
-                    child.style.visibility = 'visible';
-                });
-            });
-        }, 150);
-    }, 150);
+    // Remove any wrappers and ensure content is visible
+    splitProjectContentIntoPages();
+    initProjectScrollIndicators();
+    
+    // Force visibility on all project content
+    document.querySelectorAll('.project-content').forEach(content => {
+        content.style.opacity = '1';
+        content.style.visibility = 'visible';
+        content.querySelectorAll('*').forEach(child => {
+            child.style.opacity = '1';
+            child.style.visibility = 'visible';
+        });
+    });
 }
 
 if (document.readyState === 'loading') {
@@ -800,50 +565,16 @@ if (document.readyState === 'loading') {
 
 // Also run on window load as backup
 window.addEventListener('load', () => {
-    setTimeout(() => {
-        splitProjectContentIntoPages();
-        setTimeout(() => {
-            initProjectScrollIndicators();
-            // Force visibility on all pages and their children
-            document.querySelectorAll('.project-content-page').forEach(page => {
-                page.style.opacity = '1';
-                page.style.transform = 'none';
-                page.style.visibility = 'visible';
-                page.style.display = 'flex';
-                page.querySelectorAll('*').forEach(child => {
-                    child.style.opacity = '1';
-                    child.style.visibility = 'visible';
-                });
-            });
-        }, 150);
-    }, 150);
+    initProjects();
     initImageGallery();
 });
 
-// Re-split on resize to handle mobile/desktop switching
+// Re-initialize on resize
 let globalResizeTimeout;
 window.addEventListener('resize', () => {
     clearTimeout(globalResizeTimeout);
     globalResizeTimeout = setTimeout(() => {
-        // Force re-split by removing all wrappers
-        document.querySelectorAll('.project-content-wrapper').forEach(wrapper => {
-            wrapper.remove();
-        });
-        splitProjectContentIntoPages();
-        setTimeout(() => {
-            initProjectScrollIndicators();
-            // Force visibility on all pages and their children
-            document.querySelectorAll('.project-content-page').forEach(page => {
-                page.style.opacity = '1';
-                page.style.transform = 'none';
-                page.style.visibility = 'visible';
-                page.style.display = 'flex';
-                page.querySelectorAll('*').forEach(child => {
-                    child.style.opacity = '1';
-                    child.style.visibility = 'visible';
-                });
-            });
-        }, 150);
+        initProjects();
     }, 250);
 });
 
