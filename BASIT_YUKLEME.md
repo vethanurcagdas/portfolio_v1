@@ -93,3 +93,4 @@ Terminal komutları karmaşık geldiyse, bu yöntem çok daha kolay!
 
 
 
+

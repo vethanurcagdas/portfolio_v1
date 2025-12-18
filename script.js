@@ -417,41 +417,222 @@ document.querySelectorAll('.project-card').forEach(card => {
     // Don't observe project-card with IntersectionObserver to prevent content hiding
 });
 
-// REMOVED: Page splitting function - using simple vertical scroll instead
-// This ensures content never disappears
+// Split project content into 3 pages for mobile (horizontal scroll)
+// Desktop: Keep normal layout
 function splitProjectContentIntoPages() {
-    // Remove any existing wrappers and restore original content
     const projectContents = document.querySelectorAll('.project-content');
+    const isMobile = window.innerWidth <= 968;
     
     projectContents.forEach((content) => {
         const existingWrapper = content.querySelector('.project-content-wrapper');
-        if (existingWrapper) {
-            // Restore original content from wrapper
-            const allContent = [];
-            existingWrapper.querySelectorAll('.project-content-page').forEach(page => {
-                Array.from(page.children).forEach(child => {
-                    allContent.push(child.cloneNode(true));
+        
+        // Desktop: Remove wrapper if exists, restore normal layout
+        if (!isMobile) {
+            if (existingWrapper) {
+                const allContent = [];
+                existingWrapper.querySelectorAll('.project-content-page').forEach(page => {
+                    Array.from(page.children).forEach(child => {
+                        allContent.push(child.cloneNode(true));
+                    });
                 });
-            });
-            content.innerHTML = '';
-            allContent.forEach(child => content.appendChild(child));
+                content.innerHTML = '';
+                allContent.forEach(child => content.appendChild(child));
+            }
+            // Ensure visibility
+            content.style.opacity = '1';
+            content.style.visibility = 'visible';
+            return;
         }
         
-        // Ensure all content is visible
-        content.style.opacity = '1';
-        content.style.visibility = 'visible';
-        content.querySelectorAll('*').forEach(child => {
-            child.style.opacity = '1';
-            child.style.visibility = 'visible';
-        });
+        // Mobile: Create 3 pages if not already created
+        if (isMobile) {
+            // Check if already correctly set up
+            if (existingWrapper) {
+                const pages = existingWrapper.querySelectorAll('.project-content-page');
+                if (pages.length === 3) {
+                    // Force visibility
+                    pages.forEach(page => {
+                        page.style.opacity = '1';
+                        page.style.visibility = 'visible';
+                        page.style.display = 'flex';
+                        page.querySelectorAll('*').forEach(child => {
+                            child.style.opacity = '1';
+                            child.style.visibility = 'visible';
+                        });
+                    });
+                    return;
+                }
+            }
+            
+            // Remove existing wrapper if incorrect
+            if (existingWrapper) {
+                existingWrapper.remove();
+            }
+            
+            // Get original children
+            const children = Array.from(content.children);
+            if (children.length === 0) return;
+            
+            // Find elements
+            const tags = children.find(el => el.classList.contains('project-tags'));
+            const title = children.find(el => el.classList.contains('project-title'));
+            const description = children.find(el => el.classList.contains('project-description'));
+            const features = children.find(el => el.classList.contains('project-features'));
+            const tech = children.find(el => el.classList.contains('project-tech'));
+            const links = children.find(el => el.classList.contains('project-links'));
+            
+            // Create wrapper
+            const wrapper = document.createElement('div');
+            wrapper.className = 'project-content-wrapper';
+            
+            // Page 1: Tags + Title + Description (first part)
+            const page1 = document.createElement('div');
+            page1.className = 'project-content-page';
+            if (tags) {
+                const tagsClone = tags.cloneNode(true);
+                page1.appendChild(tagsClone);
+            }
+            if (title) {
+                const titleClone = title.cloneNode(true);
+                page1.appendChild(titleClone);
+            }
+            if (description) {
+                const descClone = description.cloneNode(true);
+                const text = descClone.textContent || descClone.innerText || '';
+                const midPoint = Math.floor(text.length / 2);
+                const firstPart = text.substring(0, midPoint);
+                descClone.textContent = firstPart + '...';
+                page1.appendChild(descClone);
+            }
+            wrapper.appendChild(page1);
+            
+            // Page 2: Description (rest) + Features
+            const page2 = document.createElement('div');
+            page2.className = 'project-content-page';
+            if (description) {
+                const descClone = description.cloneNode(true);
+                const text = descClone.textContent || descClone.innerText || '';
+                const midPoint = Math.floor(text.length / 2);
+                const secondPart = text.substring(midPoint);
+                descClone.textContent = '...' + secondPart;
+                page2.appendChild(descClone);
+            }
+            if (features) {
+                const featuresClone = features.cloneNode(true);
+                page2.appendChild(featuresClone);
+            }
+            wrapper.appendChild(page2);
+            
+            // Page 3: Tech + Links
+            const page3 = document.createElement('div');
+            page3.className = 'project-content-page';
+            if (tech) {
+                const techClone = tech.cloneNode(true);
+                page3.appendChild(techClone);
+            }
+            if (links) {
+                const linksClone = links.cloneNode(true);
+                page3.appendChild(linksClone);
+            }
+            wrapper.appendChild(page3);
+            
+            // Clear and add wrapper
+            content.innerHTML = '';
+            content.appendChild(wrapper);
+            
+            // Force visibility on all pages
+            wrapper.querySelectorAll('.project-content-page').forEach(page => {
+                page.style.opacity = '1';
+                page.style.visibility = 'visible';
+                page.style.display = 'flex';
+                page.querySelectorAll('*').forEach(child => {
+                    child.style.opacity = '1';
+                    child.style.visibility = 'visible';
+                });
+            });
+        }
     });
 }
 
-// REMOVED: Scroll indicators - not needed with simple vertical scroll
+// Project Content Scroll Indicators (3 dots for mobile)
 function initProjectScrollIndicators() {
-    // Remove all existing indicators
-    document.querySelectorAll('.project-scroll-indicator').forEach(indicator => {
-        indicator.remove();
+    const projectContents = document.querySelectorAll('.project-content');
+    const isMobile = window.innerWidth <= 968;
+    
+    projectContents.forEach((content, index) => {
+        const projectCard = content.closest('.project-card');
+        const existingIndicator = projectCard ? projectCard.querySelector('.project-scroll-indicator') : null;
+        
+        // Desktop: Remove indicators
+        if (!isMobile) {
+            if (existingIndicator) {
+                existingIndicator.remove();
+            }
+            return;
+        }
+        
+        // Mobile: Create 3-dot indicator
+        if (isMobile) {
+            // Remove existing if any
+            if (existingIndicator) {
+                existingIndicator.remove();
+            }
+            
+            // Check if has pages
+            const wrapper = content.querySelector('.project-content-wrapper');
+            if (!wrapper || wrapper.querySelectorAll('.project-content-page').length !== 3) {
+                return;
+            }
+            
+            // Create indicator
+            const indicator = document.createElement('div');
+            indicator.className = 'project-scroll-indicator';
+            
+            // Create 3 dots
+            for (let i = 0; i < 3; i++) {
+                const dot = document.createElement('span');
+                dot.className = 'scroll-dot';
+                if (i === 0) dot.classList.add('active');
+                indicator.appendChild(dot);
+            }
+            
+            // Insert indicator
+            if (projectCard) {
+                projectCard.appendChild(indicator);
+            }
+            
+            // Update indicator on scroll
+            const updateIndicator = () => {
+                const scrollLeft = content.scrollLeft;
+                const clientWidth = content.clientWidth;
+                const scrollWidth = content.scrollWidth;
+                const maxScroll = scrollWidth - clientWidth;
+                
+                if (maxScroll <= 0) return;
+                
+                // Calculate current page (0, 1, or 2)
+                const scrollPercentage = scrollLeft / maxScroll;
+                let currentPage = 0;
+                if (scrollPercentage > 0.66) {
+                    currentPage = 2;
+                } else if (scrollPercentage > 0.33) {
+                    currentPage = 1;
+                }
+                
+                // Update dots
+                const dots = indicator.querySelectorAll('.scroll-dot');
+                dots.forEach((dot, i) => {
+                    if (i === currentPage) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            };
+            
+            content.addEventListener('scroll', updateIndicator);
+            updateIndicator();
+        }
     });
 }
 
@@ -536,21 +717,24 @@ function initImageGallery() {
     }
 }
 
-// Initialize projects - ensure content is always visible
+// Initialize projects
 function initProjects() {
-    // Remove any wrappers and ensure content is visible
-    splitProjectContentIntoPages();
-    initProjectScrollIndicators();
-    
-    // Force visibility on all project content
-    document.querySelectorAll('.project-content').forEach(content => {
-        content.style.opacity = '1';
-        content.style.visibility = 'visible';
-        content.querySelectorAll('*').forEach(child => {
-            child.style.opacity = '1';
-            child.style.visibility = 'visible';
-        });
-    });
+    setTimeout(() => {
+        splitProjectContentIntoPages();
+        setTimeout(() => {
+            initProjectScrollIndicators();
+            // Force visibility
+            document.querySelectorAll('.project-content-page').forEach(page => {
+                page.style.opacity = '1';
+                page.style.visibility = 'visible';
+                page.style.display = 'flex';
+                page.querySelectorAll('*').forEach(child => {
+                    child.style.opacity = '1';
+                    child.style.visibility = 'visible';
+                });
+            });
+        }, 100);
+    }, 100);
 }
 
 if (document.readyState === 'loading') {

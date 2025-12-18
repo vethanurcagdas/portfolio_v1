@@ -755,12 +755,11 @@ section {
 }
 
 .project-content {
-    /* Simple vertical layout - no horizontal scrolling */
+    /* Desktop: Normal vertical layout */
     display: block;
     width: 100%;
     position: relative;
     box-sizing: border-box;
-    /* CRITICAL: Ensure visibility */
     opacity: 1 !important;
     visibility: visible !important;
 }
@@ -768,6 +767,17 @@ section {
 .project-content * {
     opacity: 1 !important;
     visibility: visible !important;
+}
+
+/* Desktop: Normal layout */
+.project-content-wrapper {
+    display: block;
+    width: 100%;
+}
+
+.project-content-page {
+    width: 100%;
+    display: block;
 }
 
 .project-content::-webkit-scrollbar {
@@ -1887,22 +1897,92 @@ section {
     }
 
     .project-content {
-        /* Simple vertical layout - no horizontal scrolling on mobile */
-        display: block;
+        /* Mobile: Horizontal scroll for 3 pages */
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
         width: 100%;
         max-width: 100%;
-        overflow: visible;
         padding: 0;
         margin: 0;
         box-sizing: border-box;
-        /* CRITICAL: Ensure visibility */
+        opacity: 1 !important;
+        visibility: visible !important;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    
+    .project-content::-webkit-scrollbar {
+        display: none;
+    }
+    
+    /* Mobile: 3 pages layout */
+    .project-content-wrapper {
+        display: flex;
+        width: 300%;
+        min-width: 300%;
+        flex-direction: row;
+        flex-shrink: 0;
+    }
+    
+    .project-content-page {
+        width: 33.333333%;
+        min-width: 33.333333%;
+        max-width: 33.333333%;
+        flex: 0 0 33.333333%;
+        padding: 0 1rem;
+        box-sizing: border-box;
+        display: flex !important;
+        flex-direction: column;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+    }
+    
+    .project-content-page * {
         opacity: 1 !important;
         visibility: visible !important;
     }
     
-    .project-content * {
-        opacity: 1 !important;
-        visibility: visible !important;
+    .project-content-page > * {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 1rem;
+        box-sizing: border-box;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+    
+    /* Project Scroll Indicator - Mobile (3 dots) */
+    .project-scroll-indicator {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        padding: 0.5rem 0;
+        width: 100%;
+    }
+    
+    .scroll-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--text-muted);
+        opacity: 0.4;
+        transition: all 0.3s ease;
+    }
+    
+    .scroll-dot.active {
+        background: var(--primary-color);
+        opacity: 1;
+        width: 10px;
+        height: 10px;
+        box-shadow: 0 0 8px rgba(99, 102, 241, 0.5);
     }
 
     .project-card:last-child {
@@ -2242,29 +2322,54 @@ section {
     }
 
     .project-content {
+        /* Mobile: Horizontal scroll for 3 pages */
         overflow-x: auto;
         overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
         scroll-snap-type: x mandatory;
-        touch-action: pan-x;
-        overscroll-behavior-x: contain;
-    }
-
-    .project-content {
-        /* Simple vertical layout - no horizontal scrolling */
-        display: block;
+        scroll-behavior: smooth;
         width: 100%;
         max-width: 100%;
-        overflow: visible;
         padding: 0;
         margin: 0;
         box-sizing: border-box;
-        /* CRITICAL: Ensure visibility */
         opacity: 1 !important;
         visibility: visible !important;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        touch-action: pan-x;
+        overscroll-behavior-x: contain;
     }
     
-    .project-content * {
+    .project-content::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .project-content-wrapper {
+        display: flex;
+        width: 300%;
+        min-width: 300%;
+        flex-direction: row;
+        flex-shrink: 0;
+    }
+    
+    .project-content-page {
+        width: 33.333333%;
+        min-width: 33.333333%;
+        max-width: 33.333333%;
+        flex: 0 0 33.333333%;
+        padding: 0 0.75rem;
+        box-sizing: border-box;
+        display: flex !important;
+        flex-direction: column;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+    }
+    
+    .project-content-page * {
         opacity: 1 !important;
         visibility: visible !important;
     }
