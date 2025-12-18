@@ -1954,10 +1954,16 @@ section {
         position: relative;
         word-wrap: break-word;
         overflow-wrap: break-word;
-        /* Ensure visibility */
+        /* CRITICAL: Ensure visibility - override any JavaScript or Observer changes */
         opacity: 1 !important;
         visibility: visible !important;
-        transform: translateY(0) !important;
+        transform: none !important;
+    }
+    
+    /* Ensure all children inside pages are visible */
+    .project-content-page * {
+        opacity: 1 !important;
+        visibility: visible !important;
     }
 
     .project-content-page > * {

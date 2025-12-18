@@ -391,14 +391,19 @@ const observerOptions = {
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
+            // NEVER hide project-content or project-content-page
+            if (!entry.target.classList.contains('project-content') && 
+                !entry.target.classList.contains('project-content-page') &&
+                !entry.target.closest('.project-content')) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
         }
     });
 }, observerOptions);
 
-// Observe elements for animation
-const animateElements = document.querySelectorAll('.project-card, .skill-category, .timeline-item, .stat-item, .education-card, .volunteering-card, .language-item');
+// Observe elements for animation (EXCLUDE project-content and project-content-page completely)
+const animateElements = document.querySelectorAll('.skill-category, .timeline-item, .stat-item, .education-card, .volunteering-card, .language-item');
 animateElements.forEach(el => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(30px)';
@@ -406,73 +411,63 @@ animateElements.forEach(el => {
     observer.observe(el);
 });
 
+// Project cards: Only animate the card container, NEVER the content
+document.querySelectorAll('.project-card').forEach(card => {
+    card.style.transition = 'transform 0.6s ease-out';
+    // Don't observe project-card with IntersectionObserver to prevent content hiding
+});
+
 // Split project content into pages (3 pages for mobile, normal for desktop)
+// COMPLETELY REWRITTEN to prevent content hiding issues
 function splitProjectContentIntoPages() {
     const projectContents = document.querySelectorAll('.project-content');
     const isMobile = window.innerWidth <= 968;
     
     projectContents.forEach((content) => {
-        // Remove existing wrapper if any (to allow re-splitting on resize)
+        // Skip if already processed and correct
         const existingWrapper = content.querySelector('.project-content-wrapper');
-        
-        // If wrapper exists, restore original children first
-        if (existingWrapper) {
-            // Check if we need to change layout (mobile <-> desktop switch)
-            const hasPages = existingWrapper.querySelector('.project-content-page');
-            const needsChange = (isMobile && !hasPages) || (!isMobile && hasPages);
-            
-            if (needsChange || !isMobile) {
-                // Restore original children from wrapper
-                const wrapperChildren = Array.from(existingWrapper.children);
-                if (hasPages) {
-                    // Mobile to Desktop: collect all content from pages
-                    const allContent = [];
-                    wrapperChildren.forEach(page => {
-                        Array.from(page.children).forEach(child => {
-                            allContent.push(child.cloneNode(true));
-                        });
+        if (existingWrapper && isMobile) {
+            const pages = existingWrapper.querySelectorAll('.project-content-page');
+            if (pages.length === 3) {
+                // Force visibility on all pages
+                pages.forEach(page => {
+                    page.style.opacity = '1';
+                    page.style.transform = 'none';
+                    page.style.visibility = 'visible';
+                    page.style.display = 'flex';
+                    // Ensure all children are visible
+                    page.querySelectorAll('*').forEach(child => {
+                        child.style.opacity = '1';
+                        child.style.visibility = 'visible';
                     });
-                    content.innerHTML = '';
-                    allContent.forEach(child => content.appendChild(child));
-                } else {
-                    // Desktop to Mobile: just move children back
-                    content.innerHTML = '';
-                    wrapperChildren.forEach(child => {
-                        content.appendChild(child.cloneNode(true));
-                    });
-                }
-                existingWrapper.remove();
-            } else if (isMobile && hasPages) {
-                // Already correctly set up for mobile
-                const pages = existingWrapper.querySelectorAll('.project-content-page');
-                if (pages.length === 3) {
-                    // Ensure pages are visible
-                    pages.forEach(page => {
-                        page.style.opacity = '1';
-                        page.style.transform = 'translateY(0)';
-                        page.style.visibility = 'visible';
-                        page.style.display = 'flex';
-                    });
-                    return; // Already correctly split
-                }
-                // Wrong number of pages, recreate
-                existingWrapper.remove();
+                });
+                return;
             }
         }
         
-        // Get all child elements (original content)
-        const children = Array.from(content.children);
-        if (children.length === 0) return;
+        // Desktop: Remove wrapper if exists
+        if (!isMobile && existingWrapper) {
+            const allContent = [];
+            existingWrapper.querySelectorAll('.project-content-page').forEach(page => {
+                Array.from(page.children).forEach(child => {
+                    allContent.push(child.cloneNode(true));
+                });
+            });
+            content.innerHTML = '';
+            allContent.forEach(child => content.appendChild(child));
+            return;
+        }
         
-        // Create wrapper
-        const wrapper = document.createElement('div');
-        wrapper.className = 'project-content-wrapper';
-        
+        // Mobile: Create 3 pages
         if (isMobile) {
-            // Mobile: Split into 3 pages with same structure
-            // Page 1: Tags + Title + Description (first part)
-            // Page 2: Description (rest) + Features
-            // Page 3: Tech + Buttons
+            // Remove existing wrapper
+            if (existingWrapper) {
+                existingWrapper.remove();
+            }
+            
+            // Get original children
+            const children = Array.from(content.children);
+            if (children.length === 0) return;
             
             // Find elements
             const tags = children.find(el => el.classList.contains('project-tags'));
@@ -482,19 +477,32 @@ function splitProjectContentIntoPages() {
             const tech = children.find(el => el.classList.contains('project-tech'));
             const links = children.find(el => el.classList.contains('project-links'));
             
+            // Create wrapper
+            const wrapper = document.createElement('div');
+            wrapper.className = 'project-content-wrapper';
+            
             // Page 1: Tags + Title + Description (first part)
             const page1 = document.createElement('div');
             page1.className = 'project-content-page';
+            page1.style.opacity = '1';
+            page1.style.visibility = 'visible';
+            page1.style.display = 'flex';
             if (tags) {
                 const tagsClone = tags.cloneNode(true);
+                tagsClone.style.opacity = '1';
+                tagsClone.style.visibility = 'visible';
                 page1.appendChild(tagsClone);
             }
             if (title) {
                 const titleClone = title.cloneNode(true);
+                titleClone.style.opacity = '1';
+                titleClone.style.visibility = 'visible';
                 page1.appendChild(titleClone);
             }
             if (description) {
                 const descClone = description.cloneNode(true);
+                descClone.style.opacity = '1';
+                descClone.style.visibility = 'visible';
                 const text = descClone.textContent || descClone.innerText || '';
                 const midPoint = Math.floor(text.length / 2);
                 const firstPart = text.substring(0, midPoint);
@@ -506,8 +514,13 @@ function splitProjectContentIntoPages() {
             // Page 2: Description (rest) + Features
             const page2 = document.createElement('div');
             page2.className = 'project-content-page';
+            page2.style.opacity = '1';
+            page2.style.visibility = 'visible';
+            page2.style.display = 'flex';
             if (description) {
                 const descClone = description.cloneNode(true);
+                descClone.style.opacity = '1';
+                descClone.style.visibility = 'visible';
                 const text = descClone.textContent || descClone.innerText || '';
                 const midPoint = Math.floor(text.length / 2);
                 const secondPart = text.substring(midPoint);
@@ -516,6 +529,8 @@ function splitProjectContentIntoPages() {
             }
             if (features) {
                 const featuresClone = features.cloneNode(true);
+                featuresClone.style.opacity = '1';
+                featuresClone.style.visibility = 'visible';
                 page2.appendChild(featuresClone);
             }
             wrapper.appendChild(page2);
@@ -523,32 +538,38 @@ function splitProjectContentIntoPages() {
             // Page 3: Tech + Buttons
             const page3 = document.createElement('div');
             page3.className = 'project-content-page';
+            page3.style.opacity = '1';
+            page3.style.visibility = 'visible';
+            page3.style.display = 'flex';
             if (tech) {
                 const techClone = tech.cloneNode(true);
+                techClone.style.opacity = '1';
+                techClone.style.visibility = 'visible';
                 page3.appendChild(techClone);
             }
             if (links) {
                 const linksClone = links.cloneNode(true);
+                linksClone.style.opacity = '1';
+                linksClone.style.visibility = 'visible';
                 page3.appendChild(linksClone);
             }
             wrapper.appendChild(page3);
             
-            // Clear original content and add wrapper
+            // Clear and add wrapper
             content.innerHTML = '';
             content.appendChild(wrapper);
             
-            // Ensure pages are visible after creation
-            const pages = wrapper.querySelectorAll('.project-content-page');
-            pages.forEach(page => {
+            // Force visibility on all pages and children
+            wrapper.querySelectorAll('.project-content-page').forEach(page => {
                 page.style.opacity = '1';
-                page.style.transform = 'translateY(0)';
+                page.style.transform = 'none';
                 page.style.visibility = 'visible';
                 page.style.display = 'flex';
+                page.querySelectorAll('*').forEach(child => {
+                    child.style.opacity = '1';
+                    child.style.visibility = 'visible';
+                });
             });
-        } else {
-            // Desktop: No wrapper needed, keep original layout
-            // Don't modify content for desktop
-            return;
         }
     });
 }
@@ -752,15 +773,19 @@ function initProjects() {
         // Wait a bit more for wrapper to be created
         setTimeout(() => {
             initProjectScrollIndicators();
-            // Ensure all project content pages are visible
+            // Force visibility on all pages and their children
             document.querySelectorAll('.project-content-page').forEach(page => {
                 page.style.opacity = '1';
-                page.style.transform = 'translateY(0)';
+                page.style.transform = 'none';
                 page.style.visibility = 'visible';
                 page.style.display = 'flex';
+                page.querySelectorAll('*').forEach(child => {
+                    child.style.opacity = '1';
+                    child.style.visibility = 'visible';
+                });
             });
-        }, 100);
-    }, 100);
+        }, 150);
+    }, 150);
 }
 
 if (document.readyState === 'loading') {
@@ -779,15 +804,19 @@ window.addEventListener('load', () => {
         splitProjectContentIntoPages();
         setTimeout(() => {
             initProjectScrollIndicators();
-            // Ensure all project content pages are visible
+            // Force visibility on all pages and their children
             document.querySelectorAll('.project-content-page').forEach(page => {
                 page.style.opacity = '1';
-                page.style.transform = 'translateY(0)';
+                page.style.transform = 'none';
                 page.style.visibility = 'visible';
                 page.style.display = 'flex';
+                page.querySelectorAll('*').forEach(child => {
+                    child.style.opacity = '1';
+                    child.style.visibility = 'visible';
+                });
             });
-        }, 100);
-    }, 100);
+        }, 150);
+    }, 150);
     initImageGallery();
 });
 
@@ -803,14 +832,18 @@ window.addEventListener('resize', () => {
         splitProjectContentIntoPages();
         setTimeout(() => {
             initProjectScrollIndicators();
-            // Ensure all project content pages are visible
+            // Force visibility on all pages and their children
             document.querySelectorAll('.project-content-page').forEach(page => {
                 page.style.opacity = '1';
-                page.style.transform = 'translateY(0)';
+                page.style.transform = 'none';
                 page.style.visibility = 'visible';
                 page.style.display = 'flex';
+                page.querySelectorAll('*').forEach(child => {
+                    child.style.opacity = '1';
+                    child.style.visibility = 'visible';
+                });
             });
-        }, 100);
+        }, 150);
     }, 250);
 });
 

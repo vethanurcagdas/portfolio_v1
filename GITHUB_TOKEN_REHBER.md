@@ -85,3 +85,4 @@ Terminal zor geliyorsa, GitHub web'den yükle:
 
 
 
+
