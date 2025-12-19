@@ -717,12 +717,66 @@ function initImageGallery() {
     }
 }
 
+// Handle touch events for project content to allow vertical scrolling
+function initProjectTouchHandlers() {
+    const isMobile = window.innerWidth <= 968;
+    if (!isMobile) return;
+    
+    const projectContents = document.querySelectorAll('.project-content');
+    
+    projectContents.forEach((content) => {
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let isScrolling = false;
+        
+        content.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            isScrolling = false;
+        }, { passive: true });
+        
+        content.addEventListener('touchmove', (e) => {
+            if (!touchStartX || !touchStartY) return;
+            
+            const touchX = e.touches[0].clientX;
+            const touchY = e.touches[0].clientY;
+            const deltaX = Math.abs(touchX - touchStartX);
+            const deltaY = Math.abs(touchY - touchStartY);
+            
+            // If vertical movement is greater, allow vertical scroll
+            if (deltaY > deltaX && deltaY > 10) {
+                // Vertical scroll - let the page scroll
+                isScrolling = true;
+                // Temporarily disable horizontal scroll
+                content.style.overflowX = 'hidden';
+                // Allow the event to propagate for vertical scrolling
+                return;
+            } else if (deltaX > deltaY && deltaX > 10) {
+                // Horizontal scroll - allow it
+                isScrolling = true;
+                content.style.overflowX = 'auto';
+            }
+        }, { passive: true });
+        
+        content.addEventListener('touchend', () => {
+            // Re-enable horizontal scroll after a short delay
+            setTimeout(() => {
+                content.style.overflowX = 'auto';
+                touchStartX = 0;
+                touchStartY = 0;
+                isScrolling = false;
+            }, 100);
+        }, { passive: true });
+    });
+}
+
 // Initialize projects
 function initProjects() {
     setTimeout(() => {
         splitProjectContentIntoPages();
         setTimeout(() => {
             initProjectScrollIndicators();
+            initProjectTouchHandlers();
             // Force visibility
             document.querySelectorAll('.project-content-page').forEach(page => {
                 page.style.opacity = '1';

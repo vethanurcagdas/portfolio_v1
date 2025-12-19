@@ -2337,7 +2337,8 @@ section {
         visibility: visible !important;
         scrollbar-width: none;
         -ms-overflow-style: none;
-        touch-action: pan-x;
+        /* Allow both horizontal and vertical touch actions */
+        touch-action: pan-x pan-y;
         overscroll-behavior-x: contain;
     }
     
