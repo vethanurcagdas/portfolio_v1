@@ -239,7 +239,10 @@ const langToggle = document.getElementById('langToggle');
 const langText = document.getElementById('langText');
 const html = document.documentElement;
 
-// Load saved language or default to English
+// Load saved language or default to English (force-set if not stored)
+if (!localStorage.getItem('language')) {
+    localStorage.setItem('language', 'en');
+}
 let currentLang = localStorage.getItem('language') || 'en';
 updateLanguage(currentLang);
 
@@ -308,7 +311,10 @@ function updateProjectFeatures(lang) {
 const themeToggle = document.getElementById('themeToggle');
 const themeIcon = document.getElementById('themeIcon');
 
-// Load saved theme or default to dark
+// Load saved theme or default to dark (force-set if not stored)
+if (!localStorage.getItem('theme')) {
+    localStorage.setItem('theme', 'dark');
+}
 const currentTheme = localStorage.getItem('theme') || 'dark';
 html.setAttribute('data-theme', currentTheme);
 updateThemeIcon(currentTheme);
