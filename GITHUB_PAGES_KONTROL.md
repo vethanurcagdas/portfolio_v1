@@ -74,3 +74,4 @@ Eğer hala çalışmıyorsa, repository'yi silip yeniden oluştur:
 
 
 
+

@@ -70,3 +70,4 @@ Fotoğrafları ekledikten sonra:
 
 
 
+
