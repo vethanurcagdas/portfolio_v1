@@ -67,3 +67,4 @@ Fotoğrafları ekledikten sonra:
 
 
 
+

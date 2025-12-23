@@ -128,3 +128,4 @@ Eğer eski versiyona dönmek istemiyorsan, projeler bölümünü basitleştirebi
 Bu daha kolay ve hızlı olabilir!
 
 
+
